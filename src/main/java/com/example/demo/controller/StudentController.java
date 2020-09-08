@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -18,8 +20,9 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public Student save(@RequestBody Student student) {
+        LOGGER.debug("Saving student: {}", student);
         return studentService.save(student);
     }
 
@@ -28,8 +31,10 @@ public class StudentController {
         return studentService.getById(id)
                 .orElseThrow(StudentException::new);
     }
-    @PutMapping("/{id}")
+
+    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody Student update(@PathVariable("id") Long id, @RequestBody Student student) {
+        LOGGER.debug("Updating student: {}", student);
         return studentService.update(id, student);
     }
 

@@ -11,8 +11,8 @@ import java.util.Date;
 @Table(name = "STUDENT")
 public class Student {
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @Column(name = "id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(name = "first_name", nullable = false)
