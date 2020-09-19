@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql-service:
+    build:
+      context: .
+      dockerfile: Dockerfile-mysql
+    restart: always
+    container_name: mysql-spring-demo-container
+    ports:
+      - 3307:3306
+    networks:
+      - backend
+  app-service:
+    build:
+      context: .
+      dockerfile: Dockerfile-app
+    container_name: app-spring-demo-container
+    restart: always
+    depends_on:
+      - mysql-service
+    ports:
+      - 8081:8081
+    networks:
+      - backend
+networks:
+  backend:
