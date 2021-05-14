@@ -1,14 +1,19 @@
 package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.bean.AppUser;
+import com.skalashynski.spring.springboot.bean.TokenConfirmation;
 import com.skalashynski.spring.springboot.repository.AppUserRepository;
 import com.skalashynski.spring.springboot.service.AppUserService;
+import com.skalashynski.spring.springboot.service.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -17,6 +22,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -31,7 +37,12 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         String encodedPass = passwordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPass);
         appUserRepository.save(appUser);
-        // todo: send confirmation token
-        return "temporary registration works";
+        String random = UUID.randomUUID().toString();
+        TokenConfirmation token = new TokenConfirmation(
+                random, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser);
+        confirmationTokenService.saveConfirmationToken(token);
+
+        // todo: send email
+        return random;
     }
 }
