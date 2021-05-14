@@ -1,4 +1,4 @@
-package com.example.demo.bean;
+package com.skalashynski.spring.springboot.bean;
 
 import lombok.Data;
 

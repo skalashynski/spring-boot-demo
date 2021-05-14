@@ -1,6 +1,6 @@
-package com.example.demo.repository;
+package com.skalashynski.spring.springboot.repository;
 
-import com.example.demo.bean.Student;
+import com.skalashynski.spring.springboot.bean.Student;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

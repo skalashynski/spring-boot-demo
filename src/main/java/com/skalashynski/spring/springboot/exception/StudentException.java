@@ -1,4 +1,4 @@
-package com.example.demo.exception;
+package com.skalashynski.spring.springboot.exception;
 
 public class StudentException extends RuntimeException  {
     public StudentException() {

@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.skalashynski.spring.springboot.repository;
 
 
 import org.junit.jupiter.api.Test;

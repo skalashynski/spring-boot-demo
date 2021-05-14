@@ -1,14 +1,14 @@
-package com.example.demo.controller;
+package com.skalashynski.spring.springboot.controller.advice;
 
-import com.example.demo.exception.StudentException;
+import com.skalashynski.spring.springboot.exception.StudentException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@org.springframework.web.bind.annotation.ControllerAdvice
-public class ControllerAdvice {
-
+@ControllerAdvice
+public class StudentControllerAdvice {
     @ResponseBody
     @ExceptionHandler(StudentException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

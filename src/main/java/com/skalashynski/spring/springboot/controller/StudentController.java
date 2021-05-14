@@ -1,8 +1,8 @@
-package com.example.demo.controller;
+package com.skalashynski.spring.springboot.controller;
 
-import com.example.demo.bean.Student;
-import com.example.demo.exception.StudentException;
-import com.example.demo.service.StudentService;
+import com.skalashynski.spring.springboot.bean.Student;
+import com.skalashynski.spring.springboot.exception.StudentException;
+import com.skalashynski.spring.springboot.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
