@@ -1,7 +1,6 @@
 HELP.md
 target/
 tmp/
-db-data/
 storage/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

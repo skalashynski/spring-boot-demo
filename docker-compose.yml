@@ -1,26 +1,36 @@
 version: '3'
 services:
-  mysql-service:
-    build:
-      context: .
-      dockerfile: Dockerfile-mysql
-    restart: always
-    container_name: mysql-spring-demo-container
-    ports:
-      - 3307:3306
+  postgresql-service:
+    container_name: postgresql-spring-boot-container
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: spring_boot
+    expose:
+      - 5432/tcp
+    image: postgres:alpine
     networks:
       - backend
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
   app-service:
     build:
       context: .
       dockerfile: Dockerfile-app
-    container_name: app-spring-demo-container
-    restart: always
+    container_name: app-spring-boot-container
     depends_on:
-      - mysql-service
-    ports:
-      - 8081:8081
+      - postgresql-service
+    environment:
+      spring.datasource.url: "jdbc:postgresql://postgresql-service:5432/spring_boot"
     networks:
       - backend
+    ports:
+      - 8080:8080
+    restart: always
 networks:
   backend:
+volumes:
+  db-data:

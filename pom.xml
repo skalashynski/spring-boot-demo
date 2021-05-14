@@ -6,11 +6,11 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.4.0-M2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.spring.skalashynski</groupId>
 	<artifactId>spring_boot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>demo-spring</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -89,7 +89,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<finalName>spring-demo</finalName>
+					<finalName>app-spring-boot</finalName>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
