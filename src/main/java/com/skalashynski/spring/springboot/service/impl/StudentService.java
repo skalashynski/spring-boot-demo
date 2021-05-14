@@ -1,4 +1,4 @@
-package com.skalashynski.spring.springboot.service;
+package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.bean.Student;
 import com.skalashynski.spring.springboot.exception.StudentException;

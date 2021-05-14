@@ -2,7 +2,7 @@ package com.skalashynski.spring.springboot.controller;
 
 import com.skalashynski.spring.springboot.bean.Student;
 import com.skalashynski.spring.springboot.exception.StudentException;
-import com.skalashynski.spring.springboot.service.StudentService;
+import com.skalashynski.spring.springboot.service.impl.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
