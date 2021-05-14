@@ -1,0 +1,6 @@
+FROM postgres:alpine
+ENV POSTGRES_PASSWORD root
+ENV POSTGRES_USER root
+ENV POSTGRES_DB spring_boot
+# VOLUME /
+# EXPOSE 5432/tcp

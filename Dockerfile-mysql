@@ -5,4 +5,4 @@ ENV MYSQL_ROOT_PASSWORD root
 #
 # EXPOSE 3306/tcp
 VOLUME tmp/mysql
-COPY ./sql-scripts/ /docker-entrypoint-initdb.d/
+COPY ./sql-scripts/mysql /docker-entrypoint-initdb.d/

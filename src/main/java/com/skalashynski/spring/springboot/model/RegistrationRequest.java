@@ -1,8 +1,9 @@
-package com.skalashynski.spring.springboot.controller.registration;
+package com.skalashynski.spring.springboot.model;
 
-import lombok.*;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor

@@ -1,2 +1,4 @@
-package com.skalashynski.spring.springboot.service;public interface AppUserService {
+package com.skalashynski.spring.springboot.service;
+
+public interface AppUserService {
 }

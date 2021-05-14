@@ -1,2 +1,7 @@
-package com.skalashynski.spring.springboot;public enum AppUserRole {
+package com.skalashynski.spring.springboot.model;
+
+public enum AppUserRole {
+    ADMIN,
+    USER
+
 }

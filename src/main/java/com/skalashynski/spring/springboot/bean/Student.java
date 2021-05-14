@@ -2,7 +2,6 @@ package com.skalashynski.spring.springboot.bean;
 
 import lombok.Data;
 
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -24,5 +23,9 @@ public class Student {
     @Temporal(TemporalType.DATE)
     @Column(name = "birthday")
     private Date birthday;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
 
 }
