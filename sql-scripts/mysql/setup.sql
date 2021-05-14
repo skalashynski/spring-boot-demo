@@ -23,6 +23,7 @@ create TABLE IF NOT EXISTS `mydb`.`student` (
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `birthday` DATE DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 31
@@ -33,8 +34,8 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-INSERT INTO student (id, first_name, last_name, birthday) VALUES
-(1, 'Aliko', 'Dangote', '1997-03-17'),
-(2, 'Bill', 'Gates', '1955-12-31'),
-(3, 'Folrunsho', 'Alakija', '1997-12-31');
+INSERT INTO STUDENT (id, first_name, last_name, birthday, created_at) VALUES
+(1, 'Aliko', 'Dangote', '1997-03-17', '2020-09-27 13:43:35'),
+(2, 'Bill', 'Gates', '1955-12-31', '2020-09-27 13:43:35'),
+(3, 'Folrunsho', 'Alakija', '1997-12-31', '2020-09-27 13:43:35');
 
