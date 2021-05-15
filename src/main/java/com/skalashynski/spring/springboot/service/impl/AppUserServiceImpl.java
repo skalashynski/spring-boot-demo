@@ -40,7 +40,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         String random = UUID.randomUUID().toString();
         TokenConfirmation token = new TokenConfirmation(
                 random, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser);
-        confirmationTokenService.saveConfirmationToken(token);
+        confirmationTokenService.save(token);
 
         // todo: send email
         return random;
