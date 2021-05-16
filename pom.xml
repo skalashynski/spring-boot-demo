@@ -9,10 +9,10 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.spring.skalashynski</groupId>
-	<artifactId>spring_boot</artifactId>
+	<artifactId>registration</artifactId>
 	<version>1.0.0</version>
-	<name>demo-spring</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Registration</name>
+	<description>Spring Boot registration</description>
 
 	<properties>
 		<java.version>11</java.version>
