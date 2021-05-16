@@ -16,6 +16,17 @@ services:
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data
+  mail-dev-service:
+    container_name: mail-dev-container
+    expose:
+      - 25/tcp
+    image: djfarrelly/maildev
+    networks:
+      - backend
+    ports:
+      - 1080:80
+      - 1025:25/tcp
+    restart: always
   app-service:
     build:
       context: .
@@ -23,8 +34,11 @@ services:
     container_name: app-spring-boot-container
     depends_on:
       - postgresql-service
+      - mail-dev-service
     environment:
       spring.datasource.url: "jdbc:postgresql://postgresql-service:5432/spring_boot"
+      spring.mail.host: "mail-dev-service"
+      spring.mail.posr: "25"
     networks:
       - backend
     ports:
