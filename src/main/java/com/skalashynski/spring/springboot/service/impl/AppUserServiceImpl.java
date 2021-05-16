@@ -33,7 +33,9 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public String signUp(AppUser appUser) {
-        // todo: check if a user exists by email in repo
+        if (appUserRepository.findByEmail(appUser.getEmail()).isPresent()) {
+            throw new IllegalStateException(String.format("User %s already registered.", appUser.getEmail()));
+        }
         String encodedPass = passwordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPass);
         appUserRepository.save(appUser);

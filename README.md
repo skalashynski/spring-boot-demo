@@ -19,6 +19,11 @@
 </ul>
 <h5>Swagger</h5>
 <ul>
-    <li>to open swagger use URL: http://localhost:8081/swagger-ui.html</li>
-    <li>to open swagger api use URL: http://localhost:8081/v2/api-docs</li>
+    <li>to open swagger use URL: http://localhost:8080/swagger-ui.html</li>
+    <li>to open swagger api use URL: http://localhost:8080/v2/api-docs</li>
+</ul>
+
+<h5>MailDev</h5>
+<ul>
+    <li>to open MailDev use URL: http://localhost:1080</li>
 </ul>

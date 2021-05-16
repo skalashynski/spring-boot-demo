@@ -6,7 +6,6 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/spring_boot
     username: root
     password: root
   jpa:
@@ -17,3 +16,19 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+  mail:
+    host: localhost
+    port: 25
+    username: hello
+    password: hello
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
