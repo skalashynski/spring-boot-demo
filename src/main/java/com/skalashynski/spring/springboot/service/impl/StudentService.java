@@ -1,7 +1,7 @@
 package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.bean.Student;
-import com.skalashynski.spring.springboot.exception.StudentException;
+import com.skalashynski.spring.springboot.exception.StudentRequestException;
 import com.skalashynski.spring.springboot.repository.StudentDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class StudentService {
             student.setId(id);
             return studentDAO.save(student);
         } else {
-            throw new StudentException("Can't find student with id: " + id);
+            throw new StudentRequestException("Can't find student with id: " + id);
         }
     }
 }

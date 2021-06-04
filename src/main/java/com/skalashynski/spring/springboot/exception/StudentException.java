@@ -1,23 +1,16 @@
 package com.skalashynski.spring.springboot.exception;
 
-public class StudentException extends RuntimeException  {
-    public StudentException() {
-        super();
-    }
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.http.HttpStatus;
 
-    public StudentException(String message) {
-        super(message);
-    }
+import java.time.ZonedDateTime;
 
-    public StudentException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public StudentException(Throwable cause) {
-        super(cause);
-    }
-
-    protected StudentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+@AllArgsConstructor
+@Getter
+public class StudentException {
+    private final String message;
+    private final HttpStatus httpStatus;
+    private final ZonedDateTime timestamp;
 }

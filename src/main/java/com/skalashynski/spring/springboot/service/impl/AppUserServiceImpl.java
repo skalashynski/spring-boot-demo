@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,13 +39,10 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         }
         String encodedPass = passwordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPass);
-        appUserRepository.save(appUser);
-        String random = UUID.randomUUID().toString();
-        TokenConfirmation token = new TokenConfirmation(
-                random, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser);
+        appUser =  appUserRepository.save(appUser);
+        TokenConfirmation token = confirmationTokenService.generateToken(appUser);
         confirmationTokenService.save(token);
-
         // todo: send email
-        return random;
+        return token.getToken();
     }
 }

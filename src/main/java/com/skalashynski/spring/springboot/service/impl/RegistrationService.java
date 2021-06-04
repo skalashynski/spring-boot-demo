@@ -22,7 +22,7 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailService emailSender;
 
-    public String register(RegistrationRequest request) {
+    public String register( RegistrationRequest request) {
         //todo: email validation
 
         String token = appUserService.signUp(new AppUser(
