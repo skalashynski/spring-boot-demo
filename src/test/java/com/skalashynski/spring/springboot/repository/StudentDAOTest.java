@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
 import java.sql.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -26,7 +26,7 @@ class StudentDAOTest {
 
     */
     @Autowired
-    private StudentDAO studentDAO;
+    private StudentRepository studentRepository;
 
     @Test
     void injectedComponentsAreNotNUll() {
@@ -37,11 +37,11 @@ class StudentDAOTest {
         assertNotNull(entityManager);
 
         */
-        assertNotNull(studentDAO);
+        assertNotNull(studentRepository);
     }
 
     @Test
     void betweenDates() {
-        assertEquals(3, studentDAO.findBetweenBirthdays(Date.valueOf("1900-03-17"), Date.valueOf("2000-03-17")).size());
+        assertEquals(3, studentRepository.findBetweenBirthdays(Date.valueOf("1900-03-17"), Date.valueOf("2000-03-17")).size());
     }
 }
