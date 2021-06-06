@@ -1,6 +1,10 @@
 package com.skalashynski.spring.springboot.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.skalashynski.spring.springboot.model.AppUserPermission.*;
 
@@ -17,5 +21,11 @@ public enum AppUserRole {
 
     public Set<AppUserPermission> getPermissions() {
         return permissions;
+    }
+
+    public Set<GrantedAuthority> getGrantedAuthorities() {
+        Set<GrantedAuthority> grantedAuthorities = getPermissions().stream().map(p -> new SimpleGrantedAuthority(p.getPermission())).collect(Collectors.toSet());
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        return grantedAuthorities;
     }
 }
