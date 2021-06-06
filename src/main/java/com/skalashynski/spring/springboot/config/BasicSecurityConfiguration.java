@@ -25,8 +25,8 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //.csrf().disable() // todo: it will be described later
                 //disabling csrf allows execute POST/PUT/DELETE HTTP methods on REST
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*")
-                .permitAll()
+                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/api/**").hasRole(AppUserRole.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
