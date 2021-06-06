@@ -14,7 +14,7 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/api/v1/student")
 public class StudentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
     @Autowired
@@ -26,14 +26,16 @@ public class StudentController {
         return studentService.save(student);
     }
 
-    @GetMapping("/{id}")
-    public @ResponseBody Student getById(@PathVariable("id") Integer id) {
+    @GetMapping(value = "/{id}")
+    public @ResponseBody
+    Student getById(@PathVariable("id") Long id) {
         return studentService.getById(id)
                 .orElseThrow(StudentException::new);
     }
 
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody Student update(@PathVariable("id") Long id, @RequestBody Student student) {
+    public @ResponseBody
+    Student update(@PathVariable("id") Long id, @RequestBody Student student) {
         LOGGER.debug("Updating student: {}", student);
         return studentService.update(id, student);
     }

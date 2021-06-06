@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "STUDENT")
+@Table(name = "student")
 public class Student {
     @Id
     @Column(name = "id", nullable = false, unique = true)

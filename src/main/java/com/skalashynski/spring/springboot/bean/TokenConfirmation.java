@@ -1,6 +1,5 @@
 package com.skalashynski.spring.springboot.bean;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -9,10 +8,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Table
+@Table(name = "token_confirmation")
 @Entity
 public class TokenConfirmation {
     @Id
