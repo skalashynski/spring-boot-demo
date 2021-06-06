@@ -1,5 +1,6 @@
 package com.skalashynski.spring.springboot.config;
 
+import com.skalashynski.spring.springboot.model.AppUserRole;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,8 +40,18 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
         UserDetails annaSmith = User.builder()
                 .username("annasmith")
                 .password(passwordEncoder.encode("password"))
-                .roles("STUDENT")//ROLE_STUDENT
+                .roles(AppUserRole.STUDENT.name())//ROLE_STUDENT
                 .build();
-        return new InMemoryUserDetailsManager(annaSmith);
+
+        UserDetails linda = User.builder()
+                .username("linda")
+                .password(passwordEncoder.encode("password123"))
+                .roles(AppUserRole.ADMIN.name())//ROLE_ADMIN
+                .build();
+
+        return new InMemoryUserDetailsManager(
+                annaSmith,
+                linda
+        );
     }
 }

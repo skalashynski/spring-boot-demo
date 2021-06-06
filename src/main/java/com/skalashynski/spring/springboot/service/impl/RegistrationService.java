@@ -30,7 +30,7 @@ public class RegistrationService {
                 request.getLastName(),
                 request.getEmail(),
                 request.getPassword(),
-                AppUserRole.USER));
+                AppUserRole.STUDENT));
 
         emailSender.send(request.getEmail(), request.getFirstName(), LINK + token);
         return token;
