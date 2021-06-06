@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -13,16 +14,16 @@ import java.util.stream.Collectors;
 
 @Service("fakeStudentService")
 public class FakeStudentServiceImpl implements StudentService {
-    private static final List<Student> STUDENTS = Arrays.asList(
+    private static final List<Student> STUDENTS = new ArrayList<>(Arrays.asList(
             new Student(1, "1_firstName", "1_lastName", LocalDate.now(), LocalDateTime.now()),
             new Student(2, "2_firstName", "2_lastName", LocalDate.now(), LocalDateTime.now()),
             new Student(3, "3_firstName", "3_lastName", LocalDate.now(), LocalDateTime.now())
-    );
+    ));
 
 
     @Override
     public Student save(Student student) {
-        student.setId(STUDENTS.size());
+        student.setId(STUDENTS.size() + 1);
         STUDENTS.add(student);
         return student;
     }
@@ -45,16 +46,14 @@ public class FakeStudentServiceImpl implements StudentService {
     @Override
     public void delete(long id) {
         Optional<Student> student = STUDENTS.stream().filter(s -> s.getId() == id).findFirst();
-        if (student.isPresent()) {
-            STUDENTS.remove(student);
-        }
+        student.ifPresent(STUDENTS::remove);
     }
 
     @Override
     public Student update(long id, Student student) {
         Optional<Student> findStudent = STUDENTS.stream().filter(s -> s.getId() == id).findFirst();
         if (findStudent.isPresent()) {
-            STUDENTS.remove(findStudent);
+            STUDENTS.remove(findStudent.get());
             STUDENTS.add(student);
         }
         return student;
