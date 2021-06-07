@@ -25,20 +25,20 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //disabling csrf allows execute POST/PUT/DELETE HTTP methods on REST
                 //spring security by default tries to protect our API
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
-                .antMatchers("/api/**").hasRole(STUDENT.name())
+                    .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                    .antMatchers("/api/**").hasRole(STUDENT.name())
 
-                //security for StudentManagementController
-                //there are tow way to implement permission based auth
-                //out users are role aware. They don't know about permissions or authorities
-                //actual order of defined antMatchers does really matter, and we have to be very careful
-                .antMatchers(DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
-                .anyRequest()
-                .authenticated()
-                .and()
+                    //security for StudentManagementController
+                    //there are tow way to implement permission based auth
+                    //out users are role aware. They don't know about permissions or authorities
+                    //actual order of defined antMatchers does really matter, and we have to be very careful
+                    .antMatchers(DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                    .antMatchers(POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                    .antMatchers(PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                    .antMatchers(GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
+
+                    .anyRequest().authenticated()
+                    .and()
                 .httpBasic();
     }
 

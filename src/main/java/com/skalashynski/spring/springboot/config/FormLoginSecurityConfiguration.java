@@ -53,7 +53,7 @@ public class FormLoginSecurityConfiguration extends WebSecurityConfigurerAdapter
                     .rememberMeParameter("remember-me")
                 .and()
                 .logout()
-                    .logoutSuccessUrl("/logout")
+                    .logoutUrl("/logout")
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))//because CSRF is disabled, you need to
                     .clearAuthentication(true)
                     .invalidateHttpSession(true)
