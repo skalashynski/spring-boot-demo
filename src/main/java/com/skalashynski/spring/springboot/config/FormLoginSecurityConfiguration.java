@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
 import static com.skalashynski.spring.springboot.model.AppUserRole.*;
 import static org.springframework.http.HttpMethod.*;
@@ -48,7 +50,11 @@ public class FormLoginSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/courses", true)
                 .passwordParameter("password")
-                .usernameParameter("username");
+                .usernameParameter("username")
+                .and()
+                .rememberMe()// defaults to 2 weeks
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                .key("something_very_secured");
     }
 
     //how we retrieve users from DB
