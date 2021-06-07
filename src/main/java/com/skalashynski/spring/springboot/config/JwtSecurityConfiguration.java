@@ -1,22 +1,23 @@
 package com.skalashynski.spring.springboot.config;
 
+import com.skalashynski.spring.springboot.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.concurrent.TimeUnit;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
 import static com.skalashynski.spring.springboot.model.AppUserRole.*;
 import static org.springframework.http.HttpMethod.*;
 
-/*@Configuration
-@EnableWebSecurity*/
+@Configuration
+@EnableWebSecurity
 @AllArgsConstructor
-public class FormLoginSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DaoAuthenticationProvider daoAuthenticationProvider;
 
     @Override
@@ -26,6 +27,10 @@ public class FormLoginSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .csrf().disable() // this should be disabled for form-based auth
                 //disabling csrf allows execute POST/PUT/DELETE HTTP methods on REST
                 //spring security by default tries to protect our API
+                .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
@@ -39,26 +44,7 @@ public class FormLoginSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .antMatchers(PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
                 .antMatchers(GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
                 .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                    .loginPage("/login").permitAll()
-                    .defaultSuccessUrl("/courses", true)
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                .and()
-                .rememberMe()// defaults to 2 weeks
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
-                    .key("something_very_secured")
-                    .rememberMeParameter("remember-me")
-                .and()
-                .logout()
-                    .logoutSuccessUrl("/logout")
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))//because CSRF is disabled, you need to
-                    .clearAuthentication(true)
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID", "remember-me")
-                    .logoutSuccessUrl("/login");
+                .authenticated();
     }
 
     @Override

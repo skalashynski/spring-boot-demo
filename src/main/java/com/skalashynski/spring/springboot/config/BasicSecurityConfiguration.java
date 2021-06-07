@@ -1,13 +1,10 @@
 package com.skalashynski.spring.springboot.config;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
@@ -18,8 +15,7 @@ import static org.springframework.http.HttpMethod.*;
 @EnableWebSecurity*/
 @AllArgsConstructor
 public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final PasswordEncoder passwordEncoder;
-    private final UserDetailsService userDetailsService;
+    private final DaoAuthenticationProvider daoAuthenticationProvider;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -48,14 +44,6 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider());
-    }
-
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
+        auth.authenticationProvider(daoAuthenticationProvider);
     }
 }
