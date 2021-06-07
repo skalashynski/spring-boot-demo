@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +24,14 @@ public class StudentManagementController {
     @Qualifier("fakeStudentService")
     private StudentService studentService;
 
+    @PreAuthorize("hasAuthority('student:write')")
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public Student save(@RequestBody Student student) {
         LOGGER.debug("Saving student: {}", student);
         return studentService.save(student);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMIN_TRAINEE')")
     @GetMapping(value = "/{id}")
     public @ResponseBody
     Student getById(@PathVariable("id") Long id) {
@@ -36,6 +39,7 @@ public class StudentManagementController {
                 .orElseThrow(StudentException::new);
     }
 
+    @PreAuthorize("hasAuthority('student:write')")
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Student update(@PathVariable("id") Long id, @RequestBody Student student) {
@@ -43,17 +47,20 @@ public class StudentManagementController {
         return studentService.update(id, student);
     }
 
+    @PreAuthorize("hasAuthority('student:write')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         studentService.delete(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMIN_TRAINEE')")
     @GetMapping
     public @ResponseBody
     List<Student> getAll() {
         return studentService.getAll();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMIN_TRAINEE')")
     @GetMapping("/search")
     public List<Student> getByName(@RequestParam Map<String, String> allParams) {
         return studentService.findByFirstName(allParams.get("name"));

@@ -27,3 +27,10 @@
 <ul>
     <li>to open MailDev use URL: http://localhost:1080</li>
 </ul>
+
+<p>Receiving CSRF token in Postman doesn'n work correctly. TO resolve that see the link:</p>
+<ul>
+    <li>https://dev.to/shane/using-postman-with-java-spring-and-csrf-tokens-di0
+    <p>the recommendation is to use CSRF protection for any request that could be processed by a browser by normal user. If you're creating a service that is used by non-browser clients, you will likely want to disable CSRF protection. </p>
+    </li>
+</ul>
