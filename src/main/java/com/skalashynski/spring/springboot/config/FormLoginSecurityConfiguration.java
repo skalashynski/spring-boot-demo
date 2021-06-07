@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +55,15 @@ public class FormLoginSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .and()
                 .rememberMe()// defaults to 2 weeks
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
-                .key("something_very_secured");
+                .key("something_very_secured")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))//because CSRF is disabled, you need to
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessUrl("/login");
     }
 
     //how we retrieve users from DB
