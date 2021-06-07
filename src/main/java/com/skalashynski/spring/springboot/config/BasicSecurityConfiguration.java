@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
 import static com.skalashynski.spring.springboot.model.AppUserRole.*;
@@ -25,7 +26,8 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() // TODO: it will be described later
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+                //.csrf().disable() // TODO: doesn't work correctly with using postman
                 //disabling csrf allows execute POST/PUT/DELETE HTTP methods on REST
                 //spring security by default tries to protect our API
                 .authorizeRequests()
