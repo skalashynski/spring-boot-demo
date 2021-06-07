@@ -14,7 +14,7 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("management/api/v1/student")
+@RequestMapping("/management/api/v1/student")
 public class StudentManagementController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentManagementController.class);
 
