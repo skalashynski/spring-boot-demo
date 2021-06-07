@@ -2,30 +2,31 @@ package com.skalashynski.spring.springboot.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
 import static com.skalashynski.spring.springboot.model.AppUserRole.*;
 import static org.springframework.http.HttpMethod.*;
 
-/*@Configuration
-@EnableWebSecurity*/
+@Configuration
+@EnableWebSecurity
 @AllArgsConstructor
-public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class FormLoginSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
-                //.csrf().disable() // TODO: doesn't work correctly with using postman
+                //.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+                .csrf().disable() // this should be disabled for form-based auth
                 //disabling csrf allows execute POST/PUT/DELETE HTTP methods on REST
                 //spring security by default tries to protect our API
                 .authorizeRequests()
@@ -43,7 +44,11 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/courses", true)
+                .passwordParameter("password")
+                .usernameParameter("username");
     }
 
     //how we retrieve users from DB
