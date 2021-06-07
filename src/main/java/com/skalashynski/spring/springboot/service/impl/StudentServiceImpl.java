@@ -2,23 +2,27 @@ package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.bean.Student;
 import com.skalashynski.spring.springboot.exception.StudentException;
-import com.skalashynski.spring.springboot.repository.StudentRepository;
+import com.skalashynski.spring.springboot.repository.Impl.FakeStudentRepositoryImpl;
 import com.skalashynski.spring.springboot.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service("studentService")
+@Service
 public class StudentServiceImpl implements StudentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     @Autowired
-    private StudentRepository studentRepository;
+    private final FakeStudentRepositoryImpl studentRepository;
+
+    public StudentServiceImpl(@Qualifier("fakeStudentRepository")FakeStudentRepositoryImpl studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student save(Student student) {
@@ -37,9 +41,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAll() {
-        List<Student> res = new ArrayList<>();
-        studentRepository.findAll().forEach(res::add);
-        return res;
+        return studentRepository.findAll();
     }
 
     @Override
@@ -50,11 +52,14 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student update(long id, Student student) {
         Optional<Student> studentDao = studentRepository.findById(id);
-        if (!studentDao.isPresent()) {
+        if (studentDao.isEmpty()) {
             throw new StudentException("Can't find student with id: " + id);
         }
-        student.setId(id);
-        return studentRepository.save(student);
-
+        Student s = studentDao.get();
+        s.setBirthday(student.getBirthday());
+        s.setFirstName(student.getFirstName());
+        s.setLastName(student.getLastName());
+        s.setCreatedAt(student.getCreatedAt());
+        return studentRepository.save(s);
     }
 }

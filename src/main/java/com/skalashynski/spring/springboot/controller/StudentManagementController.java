@@ -6,7 +6,6 @@ import com.skalashynski.spring.springboot.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +19,6 @@ public class StudentManagementController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentManagementController.class);
 
     @Autowired
-    @Qualifier("fakeStudentService")
     private StudentService studentService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

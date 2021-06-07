@@ -2,13 +2,12 @@ package com.skalashynski.spring.springboot.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
@@ -20,6 +19,7 @@ import static org.springframework.http.HttpMethod.*;
 @AllArgsConstructor
 public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -46,41 +46,16 @@ public class BasicSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic();
     }
 
-    //how we retrieve users from DB
-    @Bean
     @Override
-    protected UserDetailsService userDetailsService() {
-        UserDetails annaSmith = User.builder()
-                .username("annasmith")
-                .password(passwordEncoder.encode("password"))
-                //.roles(AppUserRole.STUDENT.name())//ROLE_STUDENT
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
 
-                // our user are role aware. They don't know anything about permissions or authorities
-                // go ahead and click on roles method. Inside in the builder class there we can see that it builds a list of granted authorities
-                // when we add ROLE, the builder appends the "ROLE_" underscore
-                // if we want permissions we simply pass the permissions as is
-                // the is no concept of ROLES and PERMISSIONS. Everything is bundled inside of Collection<GrantedAuthority>
-                .authorities(STUDENT.getGrantedAuthorities())
-                .build();
-
-        UserDetails linda = User.builder()
-                .username("linda")
-                .password(passwordEncoder.encode("password123"))
-                //.roles(ADMIN.name())//ROLE_ADMIN
-                .authorities(ADMIN.getGrantedAuthorities())
-                .build();
-
-        UserDetails tom = User.builder()
-                .username("tom")
-                .password(passwordEncoder.encode("password123"))
-                //.roles(AppUserRole.ADMIN_TRAINEE.name())//ROLE_ADMIN_TRAINEE
-                .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
-                .build();
-
-        return new InMemoryUserDetailsManager(
-                annaSmith,
-                linda,
-                tom
-        );
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
     }
 }

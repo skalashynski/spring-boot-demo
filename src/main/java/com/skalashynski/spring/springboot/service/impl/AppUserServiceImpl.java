@@ -2,10 +2,13 @@ package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.bean.AppUser;
 import com.skalashynski.spring.springboot.bean.TokenConfirmation;
-import com.skalashynski.spring.springboot.repository.AppUserRepository;
+import com.skalashynski.spring.springboot.repository.Impl.FakeAppUserRepositoryImpl;
 import com.skalashynski.spring.springboot.service.AppUserService;
 import com.skalashynski.spring.springboot.service.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,8 +16,8 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class AppUserServiceImpl implements AppUserService {
-    private final AppUserRepository appUserRepository;
+public class AppUserServiceImpl implements AppUserService, UserDetailsService {
+    private final FakeAppUserRepositoryImpl appUserRepository;
     private final ConfirmationTokenService confirmationTokenService;
 
 
@@ -34,5 +37,11 @@ public class AppUserServiceImpl implements AppUserService {
 
         // todo: send email
         return random;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return appUserRepository.findByUsername(username)
+                .orElseThrow(()-> new UsernameNotFoundException("Can't load user with username "+username));
     }
 }
