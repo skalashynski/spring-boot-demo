@@ -14,6 +14,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findByLastName(String lastName);
 
-    @Query(value = "SELECT * FROM STUDENT s WHERE s.birthday BETWEEN :from AND :to", nativeQuery = true)
+    @Query(value = "select * from students where birthday between :from AND :to", nativeQuery = true)
     List<Student> findBetweenBirthdays(Date from, Date to);
 }

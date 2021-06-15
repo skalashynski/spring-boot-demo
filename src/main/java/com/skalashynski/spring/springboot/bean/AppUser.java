@@ -17,18 +17,24 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "app_users")
 public class AppUser implements UserDetails {
     @Id
     @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
     private Long id;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+    @Column(name = "email")
     private String email;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
     @Enumerated(EnumType.STRING)
+    @Column(name = "app_user_role", length = 10)
     private AppUserRole appUserRole;
     private Boolean isLocked = false;
     private Boolean enabled = false;

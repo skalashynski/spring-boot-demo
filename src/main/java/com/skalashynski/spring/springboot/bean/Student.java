@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "student")
+@Table(name = "students")
 public class Student {
     @Id
     @Column(name = "id", nullable = false, unique = true)
@@ -36,7 +36,11 @@ public class Student {
     private Date createdAt;
 
     public Student(long id, String firstName, String lastName, LocalDate birthday, LocalDateTime createdAt) {
+        this(firstName, lastName, birthday, createdAt);
         this.id = id;
+    }
+
+    public Student(String firstName, String lastName, LocalDate birthday, LocalDateTime createdAt) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = java.util.Date.from(birthday.atStartOfDay()
