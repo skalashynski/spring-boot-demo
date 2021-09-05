@@ -1,5 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                    //
+//                                                      VERSIONS                                                      //
+//                                                                                                                    //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+buildscript {
+    ext {
+        postgreSQLVersion = '42.2.23.jre7'
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                    //
 //                                                      PLUGINS                                                       //
 //                                                                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,9 +58,7 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-mail',
             'org.springframework.boot:spring-boot-starter-data-jpa',
             'org.springframework.boot:spring-boot-starter-security',
-            'io.jsonwebtoken:jjwt:0.9.1',
             'io.jsonwebtoken:jjwt-impl:0.11.2',
-            'io.jsonwebtoken:jjwt-api:0.11.2',
             'org.codehaus.groovy:groovy-all:3.0.5'
     )
     testImplementation(
@@ -58,8 +66,11 @@ dependencies {
             'org.testcontainers:postgresql:1.16.0',
             'org.spockframework:spock-spring:2.0-groovy-3.0',
             'org.junit.jupiter:junit-jupiter-api:5.7.0',
-            'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-
+            'org.junit.jupiter:junit-jupiter-engine:5.7.0',
+            "org.testcontainers:spock:1.16.0"
+    )
+    runtimeOnly(
+            "org.postgresql:postgresql:${postgreSQLVersion}"
     )
     compileOnly 'org.projectlombok:lombok:1.18.20'
     testRuntimeOnly(
