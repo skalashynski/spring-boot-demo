@@ -1,4 +1,4 @@
 FROM openjdk:16-jdk-alpine
-COPY target/app-spring-boot.jar app.jar
+COPY build/libs/spring-boot2-demo.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
