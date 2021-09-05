@@ -29,8 +29,9 @@ public class RegistrationService {
                 request.getFirstName(),
                 request.getLastName(),
                 request.getEmail(),
+                request.getUsername(),
                 request.getPassword(),
-                AppUserRole.USER));
+                AppUserRole.STUDENT));
 
         emailSender.send(request.getEmail(), request.getFirstName(), LINK + token);
         return token;

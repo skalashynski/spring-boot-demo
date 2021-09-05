@@ -1,6 +1,5 @@
 package com.skalashynski.spring.springboot.bean;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -9,10 +8,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Table
+@Table(name = "tokens_confirmation")
 @Entity
 public class TokenConfirmation {
     @Id
@@ -25,10 +23,11 @@ public class TokenConfirmation {
     private Long id;
     @Column(nullable = false)
     private String token;
-    @Column(nullable = false)
+    @Column(name = "created_at" , nullable = false)
     private LocalDateTime createdAt;
-    @Column(nullable = false)
+    @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
+    @Column (name = "confirmed_at")
     private LocalDateTime confirmedAt;
 
     @ManyToOne

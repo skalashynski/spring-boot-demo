@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    initialization-mode: always
+    initialize: true
+    url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
+    platform: h2
+    data: classpath:/data.sql
+    schema: classpath:/schema.sql
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.H2Dialect
+        hbm2ddl:
+          auto: update
+        format_sql: false
+        validator:
+          apply_to_ddl: false
+    session:
+      jdbc:
+        initialize-schema: always
+    sql:
+      init:
+        data-locations: "classpath:schema:sql,classpath:data.sql"
+    show-sql: false
+  h2:
+    console:
+      enabled: true
+  security:
+    user:
+      name: user
+      password: user
+    basic: enabled=false
+
+management:
+  security:
+    enabled: false

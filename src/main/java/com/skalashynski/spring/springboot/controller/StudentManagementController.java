@@ -14,9 +14,9 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/v1/student")
-public class StudentController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
+@RequestMapping("/management/api/v1/student")
+public class StudentManagementController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StudentManagementController.class);
 
     @Autowired
     private StudentService studentService;
@@ -47,12 +47,13 @@ public class StudentController {
     }
 
     @GetMapping
-    public @ResponseBody List<Student> getAll() {
+    public @ResponseBody
+    List<Student> getAll() {
         return studentService.getAll();
     }
 
     @GetMapping("/search")
-    public List<Student> getByName(@RequestParam Map<String,String> allParams) {
+    public List<Student> getByName(@RequestParam Map<String, String> allParams) {
         return studentService.findByFirstName(allParams.get("name"));
     }
 }
