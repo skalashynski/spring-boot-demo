@@ -33,7 +33,7 @@ public class EmailResourceConfig {
 
     @Bean
     public String emailTemplate() {
-        return readFileToString("data/email.html");
+        return readFileToString("static/email_template.html");
     }
 
 
