@@ -1,6 +1,5 @@
 package com.skalashynski.spring.springboot.jwt;
 
-import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -10,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
@@ -28,32 +28,36 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 public class JwtTokenVerifier extends OncePerRequestFilter {
+
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest,
-                                    HttpServletResponse httpServletResponse,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+        HttpServletRequest httpServletRequest,
+        HttpServletResponse httpServletResponse,
+        FilterChain filterChain
+    ) throws ServletException, IOException {
         String authorizationHeader = httpServletRequest.getHeader(jwtConfig.getAuthorizationHeader());
-        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
+        if (authorizationHeader == null ||
+            authorizationHeader.isEmpty() || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
         String token = authorizationHeader.replace(jwtConfig.getTokenPrefix(), "");
         try {
             Jws<Claims> claimsJws = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token);
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token);
             Claims body = claimsJws.getBody();
             String username = body.getSubject();
             List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
 
             Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities
-                    .stream().map(a -> new SimpleGrantedAuthority(a.get("authority"))).collect(Collectors.toSet());
+                .stream().map(a -> new SimpleGrantedAuthority(a.get("authority"))).collect(Collectors.toSet());
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    username, null, simpleGrantedAuthorities
+                username, null, simpleGrantedAuthorities
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException e) {

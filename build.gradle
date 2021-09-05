@@ -1,0 +1,73 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                    //
+//                                                      PLUGINS                                                       //
+//                                                                                                                    //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'idea'
+    id 'org.springframework.boot' version '2.5.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                    //
+//                                          BUILD / RUN / TEST CONFIGURATION                                          //
+//                                                                                                                    //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(16)
+    }
+}
+
+group 'com.spring.skalashynski.spring-boot2-demo'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    mavenCentral()
+    maven { url 'https://plugins.gradle.org/m2/' }
+}
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = '7.1.1'
+}
+
+dependencies {
+    annotationProcessor(
+            'org.projectlombok:lombok',
+            'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    )
+    implementation(
+            'org.springframework.boot:spring-boot-starter',
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-mail',
+            'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-security',
+            'io.jsonwebtoken:jjwt:0.9.1',
+            'io.jsonwebtoken:jjwt-impl:0.11.2',
+            'io.jsonwebtoken:jjwt-api:0.11.2',
+            'org.codehaus.groovy:groovy-all:3.0.5'
+    )
+    testImplementation(
+            'org.springframework.boot:spring-boot-starter-test',
+            'org.testcontainers:postgresql:1.16.0',
+            'org.spockframework:spock-spring:2.0-groovy-3.0',
+            'org.junit.jupiter:junit-jupiter-api:5.7.0',
+            'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    )
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.7.0',
+            'org.junit.jupiter:junit-jupiter-engine'
+    )
+}
+
+test {
+    useJUnitPlatform()
+}
