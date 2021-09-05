@@ -2,7 +2,7 @@ package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.bean.AppUser;
 import com.skalashynski.spring.springboot.bean.TokenConfirmation;
-import com.skalashynski.spring.springboot.repository.Impl.FakeAppUserRepositoryImpl;
+import com.skalashynski.spring.springboot.repository.AppUserRepository;
 import com.skalashynski.spring.springboot.service.AppUserService;
 import com.skalashynski.spring.springboot.service.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class AppUserServiceImpl implements AppUserService, UserDetailsService {
-    private final FakeAppUserRepositoryImpl appUserRepository;
+    private final AppUserRepository appUserRepository;
     private final ConfirmationTokenService confirmationTokenService;
 
 

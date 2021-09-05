@@ -2,12 +2,11 @@ package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.bean.Student;
 import com.skalashynski.spring.springboot.exception.StudentException;
-import com.skalashynski.spring.springboot.repository.Impl.FakeStudentRepositoryImpl;
+import com.skalashynski.spring.springboot.repository.StudentRepository;
 import com.skalashynski.spring.springboot.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +17,9 @@ public class StudentServiceImpl implements StudentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     @Autowired
-    private final FakeStudentRepositoryImpl studentRepository;
+    private final StudentRepository studentRepository;
 
-    public StudentServiceImpl(@Qualifier("fakeStudentRepository")FakeStudentRepositoryImpl studentRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
@@ -59,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
         s.setBirthday(student.getBirthday());
         s.setFirstName(student.getFirstName());
         s.setLastName(student.getLastName());
-        s.setCreatedAt(student.getCreatedAt());
+        //s.setCreatedAt(student.getCreatedAt());
         return studentRepository.save(s);
     }
 }

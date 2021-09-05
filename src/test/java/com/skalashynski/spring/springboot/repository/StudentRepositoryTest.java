@@ -3,17 +3,32 @@ package com.skalashynski.spring.springboot.repository;
 import com.skalashynski.spring.springboot.bean.Student;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 
+import java.sql.SQLException;
 import java.util.List;
 
+@SpringBootTest
 @DataJpaTest
 class StudentRepositoryTest {
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Before
+    public void before() throws SQLException {
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("data.sql"));
+    }
 
     @Test
     @Disabled("Not necessary test Spring Boot provided methods.")

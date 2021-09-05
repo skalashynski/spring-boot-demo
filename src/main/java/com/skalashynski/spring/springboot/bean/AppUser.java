@@ -8,7 +8,15 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.util.Collection;
 
 
@@ -23,21 +31,24 @@ public class AppUser implements UserDetails {
     @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
     private Long id;
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
-    @Column(name = "app_user_role", length = 10)
+    @Column(name = "app_user_role")
     private AppUserRole appUserRole;
+    @Column(name = "is_locked", nullable = false)
     private Boolean isLocked = false;
+    @Column(name = "enabled", nullable = false)
     private Boolean enabled = false;
+
 
     public AppUser(String firstName, String lastName, String email, String username, String password, AppUserRole appUserRole, Boolean isLocked, Boolean enabled) {
         this.firstName = firstName;
