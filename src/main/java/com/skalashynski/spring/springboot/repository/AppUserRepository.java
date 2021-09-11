@@ -1,6 +1,6 @@
 package com.skalashynski.spring.springboot.repository;
 
-import com.skalashynski.spring.springboot.bean.AppUser;
+import com.skalashynski.spring.springboot.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

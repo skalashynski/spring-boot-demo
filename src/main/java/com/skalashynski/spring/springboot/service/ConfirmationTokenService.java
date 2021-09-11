@@ -1,6 +1,6 @@
 package com.skalashynski.spring.springboot.service;
 
-import com.skalashynski.spring.springboot.bean.TokenConfirmation;
+import com.skalashynski.spring.springboot.entity.TokenConfirmation;
 
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package com.skalashynski.spring.springboot.service;
 
-import com.skalashynski.spring.springboot.bean.Student;
+import com.skalashynski.spring.springboot.entity.Student;
 
 import java.util.List;
 import java.util.Optional;

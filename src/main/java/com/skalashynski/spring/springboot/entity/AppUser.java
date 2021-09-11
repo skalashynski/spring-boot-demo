@@ -1,4 +1,4 @@
-package com.skalashynski.spring.springboot.bean;
+package com.skalashynski.spring.springboot.entity;
 
 import com.skalashynski.spring.springboot.model.AppUserRole;
 import lombok.AllArgsConstructor;

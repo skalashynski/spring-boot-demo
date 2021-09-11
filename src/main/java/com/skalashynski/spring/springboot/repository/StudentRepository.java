@@ -1,6 +1,6 @@
 package com.skalashynski.spring.springboot.repository;
 
-import com.skalashynski.spring.springboot.bean.Student;
+import com.skalashynski.spring.springboot.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

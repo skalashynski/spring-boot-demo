@@ -1,6 +1,6 @@
 package com.skalashynski.spring.springboot.repository;
 
-import com.skalashynski.spring.springboot.bean.TokenConfirmation;
+import com.skalashynski.spring.springboot.entity.TokenConfirmation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.skalashynski.spring.springboot.service;
 
-import com.skalashynski.spring.springboot.bean.AppUser;
+import com.skalashynski.spring.springboot.entity.AppUser;
 
 public interface AppUserService {
 
