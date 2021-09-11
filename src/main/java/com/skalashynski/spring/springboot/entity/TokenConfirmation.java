@@ -21,21 +21,22 @@ import java.time.LocalDateTime;
 @Table(name = "tokens_confirmation")
 @Entity
 public class TokenConfirmation {
+
     @Id
     @SequenceGenerator(
-            name = "confirmation_token_sequence",
-            sequenceName = "confirmation_token_sequence",
-            allocationSize = 1
+        name = "confirmation_token_sequence",
+        sequenceName = "confirmation_token_sequence",
+        allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "confirmation_token_sequence")
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 400)
     private String token;
-    @Column(name = "created_at" , nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
-    @Column (name = "confirmed_at")
+    @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
 
     @ManyToOne

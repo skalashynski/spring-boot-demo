@@ -38,7 +38,7 @@ group 'com.spring.skalashynski.spring-boot2-demo'
 version '1.0.0'
 
 repositories {
-    mavenCentral()
+    mavenLocal()
     mavenCentral()
     maven { url 'https://plugins.gradle.org/m2/' }
 }
@@ -70,7 +70,10 @@ dependencies {
             "org.testcontainers:spock:1.16.0"
     )
     runtimeOnly(
-            "org.postgresql:postgresql:${postgreSQLVersion}"
+            "org.postgresql:postgresql:${postgreSQLVersion}",
+            // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
+            'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
     )
     compileOnly 'org.projectlombok:lombok:1.18.20'
     testRuntimeOnly(

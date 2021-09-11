@@ -2,8 +2,16 @@ application:
   jwt:
     secretKey: "secure_secure_secure_secure_secure_secure_secure_secure_secure_secure_secure_secure_secure"
     tokenPrefix: "Bearer "
-    tokenExpirationAfterDays: 14
+    tokenExpirationSeconds: 86400
+    issuer: "Spring_Demo_API_Service"
+
+database:
+  port: 5432
+  host: localhost
+  schema: postgres
 server:
+  servlet:
+    context-path: /demo/api/v1/
   error:
     include-message: always
     include-binding-errors: always
@@ -11,7 +19,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://${database.host}:${database.port}/${database.schema}
     username: root
     password: root
   jpa:

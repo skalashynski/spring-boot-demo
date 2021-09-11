@@ -1,27 +1,22 @@
 package com.skalashynski.spring.springboot.service.impl;
 
-import com.skalashynski.spring.springboot.bean.Student;
-import com.skalashynski.spring.springboot.exception.StudentException;
+import com.skalashynski.spring.springboot.entity.Student;
+import com.skalashynski.spring.springboot.exception.ApiException;
 import com.skalashynski.spring.springboot.repository.StudentRepository;
 import com.skalashynski.spring.springboot.service.StudentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    @Autowired
     private final StudentRepository studentRepository;
-
-    public StudentServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
 
     @Override
     public Student save(Student student) {
@@ -52,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
     public Student update(long id, Student student) {
         Optional<Student> studentDao = studentRepository.findById(id);
         if (studentDao.isEmpty()) {
-            throw new StudentException("Can't find student with id: " + id);
+            throw new ApiException("Can't find student with id: " + id);
         }
         Student s = studentDao.get();
         s.setBirthday(student.getBirthday());

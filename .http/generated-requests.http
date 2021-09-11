@@ -1,0 +1,12 @@
+
+### Registration, receive the token back
+POST http://localhost:8080/demo/api/v1/registration
+Content-Type: application/json
+
+{
+  "firstName": "Sergeia",
+  "lastName": "Kalasshynski",
+  "email": "sergei.kalasshynski@gmail.com",
+  "username": "SergesiK",
+  "password": "passwsord123"
+}

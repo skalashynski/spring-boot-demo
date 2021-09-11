@@ -1,12 +1,20 @@
-package com.skalashynski.spring.springboot.controller;
+package com.skalashynski.spring.springboot.web.controller.management;
 
-import com.skalashynski.spring.springboot.bean.Student;
-import com.skalashynski.spring.springboot.exception.StudentException;
+import com.skalashynski.spring.springboot.entity.Student;
+import com.skalashynski.spring.springboot.exception.ApiException;
 import com.skalashynski.spring.springboot.service.StudentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -14,16 +22,16 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/v1/student")
-public class StudentController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
+@RequestMapping("/management/student")
+@Slf4j
+public class StudentManagementController {
 
     @Autowired
     private StudentService studentService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public Student save(@RequestBody Student student) {
-        LOGGER.debug("Saving student: {}", student);
+        log.debug("Saving student: {}", student);
         return studentService.save(student);
     }
 
@@ -31,13 +39,13 @@ public class StudentController {
     public @ResponseBody
     Student getById(@PathVariable("id") Long id) {
         return studentService.getById(id)
-                .orElseThrow(StudentException::new);
+                .orElseThrow(ApiException::new);
     }
 
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Student update(@PathVariable("id") Long id, @RequestBody Student student) {
-        LOGGER.debug("Updating student: {}", student);
+        log.debug("Updating student: {}", student);
         return studentService.update(id, student);
     }
 
@@ -47,12 +55,13 @@ public class StudentController {
     }
 
     @GetMapping
-    public @ResponseBody List<Student> getAll() {
+    public @ResponseBody
+    List<Student> getAll() {
         return studentService.getAll();
     }
 
     @GetMapping("/search")
-    public List<Student> getByName(@RequestParam Map<String,String> allParams) {
+    public List<Student> getByName(@RequestParam Map<String, String> allParams) {
         return studentService.findByFirstName(allParams.get("name"));
     }
 }

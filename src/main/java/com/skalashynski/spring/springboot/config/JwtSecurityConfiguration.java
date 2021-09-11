@@ -1,9 +1,10 @@
 package com.skalashynski.spring.springboot.config;
 
 import com.skalashynski.spring.springboot.jwt.JwtConfig;
-import com.skalashynski.spring.springboot.jwt.JwtTokenVerifier;
-import com.skalashynski.spring.springboot.jwt.JwtUsernameAndPasswordAuthenticationFilter;
-import lombok.AllArgsConstructor;
+import com.skalashynski.spring.springboot.jwt.JwtService;
+import com.skalashynski.spring.springboot.web.filter.JwtTokenVerifierFilter;
+import com.skalashynski.spring.springboot.web.filter.JwtUsernameAndPasswordAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,20 +14,23 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-import javax.crypto.SecretKey;
-
 import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
-import static com.skalashynski.spring.springboot.model.AppUserRole.*;
-import static org.springframework.http.HttpMethod.*;
+import static com.skalashynski.spring.springboot.model.AppUserRole.ADMIN;
+import static com.skalashynski.spring.springboot.model.AppUserRole.ADMIN_TRAINEE;
+import static com.skalashynski.spring.springboot.model.AppUserRole.STUDENT;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final JwtConfig jwtConfig;
-    private final SecretKey secretKey;
+    private final JwtService jwtService;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -38,20 +42,22 @@ public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, jwtService))
+                .addFilterAfter(new JwtTokenVerifierFilter(jwtConfig, jwtService), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                     .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
-                    .antMatchers("/api/**").hasRole(STUDENT.name())
+                    .antMatchers(POST,"/registration").permitAll()
+                    .antMatchers(GET,"/registration/confirm").permitAll()
+                    .antMatchers("/**").hasAnyRole(STUDENT.name(), ADMIN.name())
 
                     //security for StudentManagementController
                     //there are tow way to implement permission based auth
                     //out users are role aware. They don't know about permissions or authorities
                     //actual order of defined antMatchers does really matter, and we have to be very careful
-                    .antMatchers(DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                    .antMatchers(POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                    .antMatchers(PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                    .antMatchers(GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
+                    .antMatchers(DELETE, "/management**").hasAuthority(COURSE_WRITE.getPermission())
+                    .antMatchers(POST, "/management**").hasAuthority(COURSE_WRITE.getPermission())
+                    .antMatchers(PUT, "/management**").hasAuthority(COURSE_WRITE.getPermission())
+                    .antMatchers(GET, "/management**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
 
                     .anyRequest().authenticated();
     }
