@@ -30,7 +30,7 @@ services:
   app-service:
     build:
       context: .
-      dockerfile: Dockerfile-app
+      dockerfile: Dockerfile
     container_name: app-spring-boot-container
     depends_on:
       - postgresql-service
