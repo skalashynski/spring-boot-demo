@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Build and test.
+    name: Build and test
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,7 @@ jobs:
         run: >-
           ./gradlew dependencies
 
-      - name: Build and Test
+      - name: Build and Test.
         run: >-
           ./gradlew build
 
