@@ -6,6 +6,9 @@ import com.skalashynski.spring.springboot.entity.Student
 import com.skalashynski.spring.springboot.util.ResourceUtils
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -24,6 +27,7 @@ class StudentControllerTest extends DatabaseSpecification {
 
 
     private TestRestTemplate restTemplate = new TestRestTemplate();
+    private HttpHeaders headers = new HttpHeaders();
 
     static String setupContent
     static String cleanupContent
@@ -37,6 +41,7 @@ class StudentControllerTest extends DatabaseSpecification {
     //выполняется перед каждым тестом
     @SuppressWarnings("unused")
     def setup() {
+        headers.add("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpZF92YWx1ZSIsImlhdCI6MTYzMTU1MzMzNiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfU1RVREVOVCJ9XSwic3ViIjoiU2VyZ2lLOSIsImlzcyI6IlNwcmluZ19EZW1vX0FQSV9TZXJ2aWNlIiwiZXhwIjoxNjMxNjM5NzM2fQ.FvtHT7tUBBPJeSBBHOLh1rloyi8YzGIkxbelJZHvSKw");
         sql.execute(setupContent)
     }
 
@@ -56,8 +61,10 @@ class StudentControllerTest extends DatabaseSpecification {
             Student actualStudent
             def actualErrorMessage
             try {
-                ResponseEntity<Student> response = restTemplate.getForEntity("http://localhost:8080/demo/api/v1/student/" + id, Student.class)
-                println("Response: " + response)
+                ResponseEntity<Student> response = restTemplate.exchange("http://localhost:8080/demo/api/v1/student/" + id, HttpMethod.GET, new HttpEntity<>
+                        (headers), Student.class)
+                actualStudent = response.getBody()
+                println("Response: " + actualStudent)
             } catch (Exception e) {
                 actualErrorMessage = e.getMessage()
             }
@@ -65,7 +72,7 @@ class StudentControllerTest extends DatabaseSpecification {
         then:
             actualStudent.getFirstName() == result.getFirstName()
             actualStudent.getLastName() == result.getLastName()
-            actualErrorMessage == expecterError
+            //actualErrorMessage == expecterError
         where:
             id || result                                                                                     || expecterError
             1  || new Student(1, 'Aliko', 'Dangote', LocalDate.parse('1997-03-17'), LocalDateTime.now())     || null
