@@ -6,8 +6,6 @@ import groovy.sql.Sql
 import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.PropertySource
-import org.springframework.jdbc.datasource.DriverManagerDataSource
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -16,15 +14,16 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.spock.Testcontainers
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import javax.sql.DataSource
 
 @Testcontainers
 @RunWith(SpringRunner.class)
 @ContextConfiguration
-@SpringBootTest
+@SpringBootTest(classes = Application.class)
 class DatabaseSpecification extends Specification {
+
+
     @Shared
     static def container;
 
