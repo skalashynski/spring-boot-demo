@@ -6,6 +6,9 @@ import com.skalashynski.spring.springboot.entity.Student
 import com.skalashynski.spring.springboot.util.ResourceUtils
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -22,54 +25,65 @@ import java.time.LocalDateTime
 @ContextConfiguration
 class StudentControllerTest extends DatabaseSpecification {
 
-
     private TestRestTemplate restTemplate = new TestRestTemplate();
+    private HttpHeaders headers = new HttpHeaders();
 
     static String setupContent
     static String cleanupContent
 
-    //выполняется 1 раз перед всеми тестами (подгрузка ресурсов)
+//  выполняется 1 раз перед всеми тестами (подгрузка ресурсов)
     def setupSpec() {
         cleanupContent = ResourceUtils.getResourceContents('cleanup.sql')
         setupContent = ResourceUtils.getResourceContents('data.sql')
     }
 
-    //выполняется перед каждым тестом
+//  выполняется перед каждым тестом
     @SuppressWarnings("unused")
     def setup() {
+        //used 1 year expiration token
+        headers.add("Authorization"
+                , "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpZF92YWx1ZSIsImlhdCI6MTYzMTcxNzM2MiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfU1RVREVOVCJ9XSwic3ViIjoiU2VyZ2lLMyIsImlzcyI6IlNwcmluZ19EZW1vX0FQSV9TZXJ2aWNlIiwiZXhwIjoxNjYzMjUzMzYyfQ.D4EVYJu6Cyb82M7vs1QphF11pQYWIgLo57BbHbfgeKQ")
         sql.execute(setupContent)
     }
 
-    //выполняется после каждого теста (очистка таблицы)
+//  выполняется после каждого теста (очистка таблицы)
     @SuppressWarnings("unused")
     def cleanup() {
         sql.execute(cleanupContent)
     }
 
-    //выполняется после всех тестов 1 раз (освобождает ресурсы)
-    def cleanupSpec() {
-    }
+//  выполняется после всех тестов 1 раз (освобождает ресурсы)
+//    def cleanupSpec() {
+//    }
 
     @Unroll
-    def void "Student get by id"() {
+    def void "Student get by id"(Long id) {
         when:
-            Student actualStudent
+            def response
             def actualErrorMessage
             try {
-                ResponseEntity<Student> response = restTemplate.getForEntity("http://localhost:8080/demo/api/v1/student/" + id, Student.class)
-                println("Response: " + response)
+                response = restTemplate.exchange(
+                        "http://localhost:8080/demo/api/v1/student/" + id
+                        , HttpMethod.GET
+                        , new HttpEntity<> (headers)
+                        , Student.class)
             } catch (Exception e) {
                 actualErrorMessage = e.getMessage()
             }
-
         then:
-            actualStudent.getFirstName() == result.getFirstName()
-            actualStudent.getLastName() == result.getLastName()
-            actualErrorMessage == expecterError
+            def actualStudent = response.getBody()
+            if(actualStudent != null) {
+                assert actualStudent.getId() == result.getId()
+                assert actualStudent.getFirstName() == result.getFirstName()
+                assert actualStudent.getLastName() == result.getLastName()
+            }else {
+                assert actualStudent == result
+            }
         where:
-            id || result                                                                                     || expecterError
-            1  || new Student(1, 'Aliko', 'Dangote', LocalDate.parse('1997-03-17'), LocalDateTime.now())     || null
-            2  || new Student(2, 'Bill', 'Gates', LocalDate.parse('1955-12-31'), LocalDateTime.now())        || null
-            3  || new Student(3, 'Folrunsho', 'Alakija', LocalDate.parse('1997-12-31'), LocalDateTime.now()) || null
+            id || result
+            1  || new Student(1, 'Aliko', 'Dangote', LocalDate.parse('1997-03-17'), LocalDateTime.now())
+            2  || new Student(2, 'Bill', 'Gates', LocalDate.parse('1955-12-31'), LocalDateTime.now())
+            3  || new Student(3, 'Folrunsho', 'Alakija', LocalDate.parse('1997-12-31'), LocalDateTime.now())
+            7  || null
     }
 }
