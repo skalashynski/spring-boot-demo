@@ -41,7 +41,7 @@ class StudentControllerTest extends DatabaseSpecification {
     //выполняется перед каждым тестом
     @SuppressWarnings("unused")
     def setup() {
-        headers.add("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpZF92YWx1ZSIsImlhdCI6MTYzMTU1MzMzNiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfU1RVREVOVCJ9XSwic3ViIjoiU2VyZ2lLOSIsImlzcyI6IlNwcmluZ19EZW1vX0FQSV9TZXJ2aWNlIiwiZXhwIjoxNjMxNjM5NzM2fQ.FvtHT7tUBBPJeSBBHOLh1rloyi8YzGIkxbelJZHvSKw");
+        headers.add("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpZF92YWx1ZSIsImlhdCI6MTYzMTY4ODk4MywiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfU1RVREVOVCJ9XSwic3ViIjoiU2VyZ2lLMTAiLCJpc3MiOiJTcHJpbmdfRGVtb19BUElfU2VydmljZSIsImV4cCI6MTYzMjU1Mjk4M30.aY-4gRWYMxthyLYLC5qKFa0ozDsPbsjp4BLAamOJQkw");
         sql.execute(setupContent)
     }
 

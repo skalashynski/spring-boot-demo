@@ -2,7 +2,7 @@ application:
   jwt:
     secretKey: "secure_secure_secure_secure_secure_secure_secure_secure_secure_secure_secure_secure_secure"
     tokenPrefix: "Bearer "
-    tokenExpirationSeconds: 86400
+    tokenExpirationSeconds: 864000
     issuer: "Spring_Demo_API_Service"
 
 database:
