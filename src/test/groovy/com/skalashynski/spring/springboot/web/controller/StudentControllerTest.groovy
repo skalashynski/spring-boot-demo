@@ -31,13 +31,13 @@ class StudentControllerTest extends DatabaseSpecification {
     static String setupContent
     static String cleanupContent
 
-//  выполняется 1 раз перед всеми тестами (подгрузка ресурсов)
+//  setup resources (once before all tests)
     def setupSpec() {
         cleanupContent = ResourceUtils.getResourceContents('cleanup.sql')
         setupContent = ResourceUtils.getResourceContents('data.sql')
     }
 
-//  выполняется перед каждым тестом
+//  do before each test
     @SuppressWarnings("unused")
     def setup() {
         //used 1 year expiration token
@@ -46,18 +46,18 @@ class StudentControllerTest extends DatabaseSpecification {
         sql.execute(setupContent)
     }
 
-//  выполняется после каждого теста (очистка таблицы)
+//  do after each test (clean resources)
     @SuppressWarnings("unused")
     def cleanup() {
         sql.execute(cleanupContent)
     }
 
-//  выполняется после всех тестов 1 раз (освобождает ресурсы)
+//  clean resources (once after all tests)
 //    def cleanupSpec() {
 //    }
 
     @Unroll
-    def void "Student get by id"(Long id) {
+    def void "Student get by id.Student by #id is #result"(Long id) {
         when:
             def response
             def actualErrorMessage
