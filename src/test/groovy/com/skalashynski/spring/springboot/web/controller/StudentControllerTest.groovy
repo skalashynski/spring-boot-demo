@@ -4,12 +4,12 @@ import com.skalashynski.spring.springboot.Application
 import com.skalashynski.spring.springboot.DatabaseSpecification
 import com.skalashynski.spring.springboot.entity.Student
 import com.skalashynski.spring.springboot.util.ResourceUtils
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
-import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Unroll
@@ -28,33 +28,27 @@ class StudentControllerTest extends DatabaseSpecification {
     private TestRestTemplate restTemplate = new TestRestTemplate();
     private HttpHeaders headers = new HttpHeaders();
 
+    @Value('${test.token}')
+    private String TOKEN_1_YEAR_DURATION;
+
     static String setupContent
     static String cleanupContent
 
-//  setup resources (once before all tests)
     def setupSpec() {
         cleanupContent = ResourceUtils.getResourceContents('cleanup.sql')
         setupContent = ResourceUtils.getResourceContents('data.sql')
     }
 
-//  do before each test
     @SuppressWarnings("unused")
     def setup() {
-        //used 1 year expiration token
-        headers.add("Authorization"
-                , "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJpZF92YWx1ZSIsImlhdCI6MTYzMTcxNzM2MiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfU1RVREVOVCJ9XSwic3ViIjoiU2VyZ2lLMyIsImlzcyI6IlNwcmluZ19EZW1vX0FQSV9TZXJ2aWNlIiwiZXhwIjoxNjYzMjUzMzYyfQ.D4EVYJu6Cyb82M7vs1QphF11pQYWIgLo57BbHbfgeKQ")
+        headers.add("Authorization", TOKEN_1_YEAR_DURATION)
         sql.execute(setupContent)
     }
 
-//  do after each test (clean resources)
     @SuppressWarnings("unused")
     def cleanup() {
         sql.execute(cleanupContent)
     }
-
-//  clean resources (once after all tests)
-//    def cleanupSpec() {
-//    }
 
     @Unroll
     def void "Student get by id.Student by #id is #result"(Long id) {
