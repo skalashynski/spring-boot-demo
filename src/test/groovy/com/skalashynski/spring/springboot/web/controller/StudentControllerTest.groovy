@@ -86,7 +86,7 @@ class StudentControllerTest extends DatabaseSpecification {
     }
 
     @Unroll
-    def void "Students get all, expected 3"() {
+    def void "Students get all, expected 6"() {
         when:
             def response
             def actualErrorMessage
@@ -101,6 +101,31 @@ class StudentControllerTest extends DatabaseSpecification {
             }
         then:
             List<Student> actualStudents = response.getBody()
-            assert actualStudents.size() == 3
+            assert actualStudents.size() == 6
+    }
+
+    @Unroll
+    def void "Students get by #name, expected #count"() {
+        when:
+            def response
+            def actualErrorMessage
+            try {
+                response = restTemplate.exchange(
+                        STUDENT_URL + "search?name=" + name
+                        , HttpMethod.GET
+                        , new HttpEntity<>(headers)
+                        , List<Student>)
+            } catch (Exception e) {
+                actualErrorMessage = e.getMessage()
+            }
+        then:
+            List<Student> actualStudent = response.getBody()
+            assert actualStudent.size() == count
+        where:
+            name        || count
+            'Aliko'     || 1
+            'Bill'      || 2
+            'Folrunsho' || 3
+            'Dima'      || 0
     }
 }
