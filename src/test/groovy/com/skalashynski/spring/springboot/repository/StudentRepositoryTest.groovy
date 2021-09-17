@@ -30,6 +30,6 @@ class StudentRepositoryTest extends DatabaseSpecification {
         when: "Calling DB"
             List<Student> list = studentRepository.findBetweenBirthdays(java.sql.Date.valueOf("1900-03-17"), java.sql.Date.valueOf("2030-03-17"));
         then: ""
-            list.size() == 3
+            list.size() == 6
     }
 }
