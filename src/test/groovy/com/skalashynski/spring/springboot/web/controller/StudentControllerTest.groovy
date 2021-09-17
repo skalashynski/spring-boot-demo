@@ -86,7 +86,7 @@ class StudentControllerTest extends DatabaseSpecification {
     }
 
     @Unroll
-    def void "Students get all, expected 3"() {
+    def void "Students get all, expected 6"() {
         when:
             def response
             def actualErrorMessage
@@ -101,7 +101,7 @@ class StudentControllerTest extends DatabaseSpecification {
             }
         then:
             List<Student> actualStudents = response.getBody()
-            assert actualStudents.size() == 3
+            assert actualStudents.size() == 6
     }
 
     @Unroll
@@ -124,8 +124,8 @@ class StudentControllerTest extends DatabaseSpecification {
         where:
             name        || count
             'Aliko'     || 1
-            'Bill'      || 1
-            'Folrunsho' || 1
+            'Bill'      || 2
+            'Folrunsho' || 3
             'Dima'      || 0
     }
 }
