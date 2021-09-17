@@ -103,4 +103,29 @@ class StudentControllerTest extends DatabaseSpecification {
             List<Student> actualStudents = response.getBody()
             assert actualStudents.size() == 3
     }
+
+    @Unroll
+    def void "Students get by #name, expected #count"() {
+        when:
+            def response
+            def actualErrorMessage
+            try {
+                response = restTemplate.exchange(
+                        STUDENT_URL + "search?name=" + name
+                        , HttpMethod.GET
+                        , new HttpEntity<>(headers)
+                        , List<Student>)
+            } catch (Exception e) {
+                actualErrorMessage = e.getMessage()
+            }
+        then:
+            List<Student> actualStudent = response.getBody()
+            assert actualStudent.size() == count
+        where:
+            name        || count
+            'Aliko'     || 1
+            'Bill'      || 1
+            'Folrunsho' || 1
+            'Dima'      || 0
+    }
 }
