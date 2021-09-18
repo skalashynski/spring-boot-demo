@@ -64,4 +64,10 @@ public class StudentController {
     public List<Student> getByName(@RequestParam Map<String, String> allParams) {
         return studentService.findByFirstName(allParams.get("name"));
     }
+
+    @GetMapping("/search/by/birthdays")
+    public List<Student>getByBirthdaysDates(@RequestParam Map<String, String> allParams){
+        return studentService.findBetweenBirthdays(java.sql.Date.valueOf(allParams.get("from")),
+            java.sql.Date.valueOf(allParams.get("to")));
+    }
 }
