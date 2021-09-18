@@ -56,76 +56,101 @@ class StudentControllerTest extends DatabaseSpecification {
     @Unroll
     def void "Student get by #id, expected #expectedHttpCode"(Long id) {
         when:
-            def response
-            def actualErrorMessage
-            try {
-                response = restTemplate.exchange(
-                        STUDENT_URL + id
-                        , HttpMethod.GET
-                        , new HttpEntity<>(headers)
-                        , Student.class)
-            } catch (Exception e) {
-                actualErrorMessage = e.getMessage()
-            }
+        def response
+        def actualErrorMessage
+        try {
+            response = restTemplate.exchange(
+                    STUDENT_URL + id
+                    , HttpMethod.GET
+                    , new HttpEntity<>(headers)
+                    , Student.class)
+        } catch (Exception e) {
+            actualErrorMessage = e.getMessage()
+        }
         then:
-            def actualStudent = response.getBody()
-            if (actualStudent != null) {
-                assert actualStudent.getId() == result.getId()
-                assert actualStudent.getFirstName() == result.getFirstName()
-                assert actualStudent.getLastName() == result.getLastName()
-            } else {
-                assert actualStudent == result
-            }
-            assert response.getStatusCode() == expectedHttpCode
+        def actualStudent = response.getBody()
+        if (actualStudent != null) {
+            assert actualStudent.getId() == result.getId()
+            assert actualStudent.getFirstName() == result.getFirstName()
+            assert actualStudent.getLastName() == result.getLastName()
+        } else {
+            assert actualStudent == result
+        }
+        assert response.getStatusCode() == expectedHttpCode
         where:
-            id || expectedHttpCode     || result
-            1  || HttpStatus.OK        || new Student(1, 'Aliko', 'Dangote', LocalDate.parse('1997-03-17'), LocalDateTime.now())
-            2  || HttpStatus.OK        || new Student(2, 'Bill', 'Gates', LocalDate.parse('1955-12-31'), LocalDateTime.now())
-            3  || HttpStatus.OK        || new Student(3, 'Folrunsho', 'Alakija', LocalDate.parse('1997-12-31'), LocalDateTime.now())
-            7  || HttpStatus.NOT_FOUND || null
+        id || expectedHttpCode     || result
+        1  || HttpStatus.OK        || new Student(1, 'Aliko', 'Dangote', LocalDate.parse('1997-03-17'), LocalDateTime.now())
+        2  || HttpStatus.OK        || new Student(2, 'Bill', 'Gates', LocalDate.parse('1955-12-31'), LocalDateTime.now())
+        3  || HttpStatus.OK        || new Student(3, 'Folrunsho', 'Alakija', LocalDate.parse('1997-12-31'), LocalDateTime.now())
+        7  || HttpStatus.NOT_FOUND || null
     }
 
     @Unroll
     def void "Students get all, expected 6"() {
         when:
-            def response
-            def actualErrorMessage
-            try {
-                response = restTemplate.exchange(
-                        STUDENT_URL
-                        , HttpMethod.GET
-                        , new HttpEntity<>(headers)
-                        , List<Student>)
-            } catch (Exception e) {
-                actualErrorMessage = e.getMessage()
-            }
+        def response
+        def actualErrorMessage
+        try {
+            response = restTemplate.exchange(
+                    STUDENT_URL
+                    , HttpMethod.GET
+                    , new HttpEntity<>(headers)
+                    , List<Student>)
+        } catch (Exception e) {
+            actualErrorMessage = e.getMessage()
+        }
         then:
-            List<Student> actualStudents = response.getBody()
-            assert actualStudents.size() == 6
+        List<Student> actualStudents = response.getBody()
+        assert actualStudents.size() == 6
     }
 
     @Unroll
     def void "Students get by #name, expected #count"() {
         when:
-            def response
-            def actualErrorMessage
-            try {
-                response = restTemplate.exchange(
-                        STUDENT_URL + "search?name=" + name
-                        , HttpMethod.GET
-                        , new HttpEntity<>(headers)
-                        , List<Student>)
-            } catch (Exception e) {
-                actualErrorMessage = e.getMessage()
-            }
+        def response
+        def actualErrorMessage
+        try {
+            response = restTemplate.exchange(
+                    STUDENT_URL + "search?name=" + name
+                    , HttpMethod.GET
+                    , new HttpEntity<>(headers)
+                    , List<Student>)
+        } catch (Exception e) {
+            actualErrorMessage = e.getMessage()
+        }
         then:
-            List<Student> actualStudent = response.getBody()
-            assert actualStudent.size() == count
+        List<Student> actualStudent = response.getBody()
+        assert actualStudent.size() == count
         where:
-            name        || count
-            'Aliko'     || 1
-            'Bill'      || 2
-            'Folrunsho' || 3
-            'Dima'      || 0
+        name        || count
+        'Aliko'     || 1
+        'Bill'      || 2
+        'Folrunsho' || 3
+        'Dima'      || 0
+    }
+
+    @Unroll
+    def void "Students get by date between #from and #to, expected #count"() {
+        when:
+        def response
+        def actualErrorMessage
+        try {
+            response = restTemplate.exchange(
+                    STUDENT_URL + "/search/by/birthdays?from=" + from + "&to=" + to
+                    , HttpMethod.GET
+                    , new HttpEntity<>(headers)
+                    , List<Student>)
+        } catch (Exception e) {
+            actualErrorMessage = e.getMessage()
+        }
+        then:
+        List<Student> actualStudent = response.getBody()
+        assert actualStudent.size() == count
+        where:
+        from         | to           || count
+        '1997-03-17' | '1997-12-31' || 2
+        '1955-12-31' | '1997-12-31' || 6
+        '1993-06-03' | '1993-06-03' || 1
+        '2000-06-03' | '2000-12-03' || 0
     }
 }
