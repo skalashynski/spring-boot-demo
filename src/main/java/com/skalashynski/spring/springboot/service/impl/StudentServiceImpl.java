@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +56,10 @@ public class StudentServiceImpl implements StudentService {
         s.setLastName(student.getLastName());
         //s.setCreatedAt(student.getCreatedAt());
         return studentRepository.save(s);
+    }
+
+    @Override
+    public List<Student> findBetweenBirthdays(Date from, Date to) {
+        return studentRepository.findBetweenBirthdays(from,to);
     }
 }
