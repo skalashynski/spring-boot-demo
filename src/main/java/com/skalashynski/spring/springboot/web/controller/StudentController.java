@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -65,9 +66,10 @@ public class StudentController {
         return studentService.findByFirstName(allParams.get("name"));
     }
 
-    @GetMapping("/search/by/birthdays")
-    public List<Student>getByBirthdaysDates(@RequestParam Map<String, String> allParams){
-        return studentService.findBetweenBirthdays(java.sql.Date.valueOf(allParams.get("from")),
-            java.sql.Date.valueOf(allParams.get("to")));
+    @GetMapping("/search/birthdays")
+    public List<Student> getByBirthdaysDates(@RequestParam Map<String, String> allParams) {
+        java.sql.Date dateFrom = java.sql.Date.valueOf(Optional.of(allParams.get("from")).orElseThrow(ApiException::new));
+        java.sql.Date dateTo = java.sql.Date.valueOf(Optional.of(allParams.get("to")).orElseThrow(ApiException::new));
+        return studentService.findBetweenBirthdays(dateFrom, dateTo);
     }
 }
