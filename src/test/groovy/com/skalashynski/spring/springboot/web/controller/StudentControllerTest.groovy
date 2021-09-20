@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 
 import java.time.LocalDate
@@ -127,5 +128,29 @@ class StudentControllerTest extends DatabaseSpecification {
             'Bill'      || 2
             'Folrunsho' || 3
             'Dima'      || 0
+    }
+
+    @Unroll
+    def void "Delete student by #id, expected #code"(Long id) {
+        when:
+            def response
+            def actualErrorMessage
+            try {
+                response = restTemplate.exchange(
+                        STUDENT_URL + id
+                        , HttpMethod.DELETE
+                        , new HttpEntity<>(headers)
+                        , Void.class)
+            } catch (Exception e) {
+                actualErrorMessage = e.getMessage()
+            }
+        then:
+            assert response.getStatusCode() == code
+        where:
+            id || code
+            1  || HttpStatus.NO_CONTENT
+            2  || HttpStatus.NO_CONTENT
+            3  || HttpStatus.NO_CONTENT
+            8  || HttpStatus.NOT_FOUND
     }
 }

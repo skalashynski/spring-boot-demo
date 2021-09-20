@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StudentService {
+
     Student save(Student student);
 
     Optional<Student> getById(long id);
@@ -14,7 +15,7 @@ public interface StudentService {
 
     List<Student> getAll();
 
-    void delete(long id);
+    boolean delete(long id);
 
     Student update(long id, Student student);
 }
