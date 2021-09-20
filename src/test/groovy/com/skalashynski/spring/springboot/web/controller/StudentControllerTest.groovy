@@ -13,7 +13,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 
 import java.time.LocalDate
