@@ -153,4 +153,35 @@ class StudentControllerTest extends DatabaseSpecification {
             3  || HttpStatus.NO_CONTENT
             8  || HttpStatus.NOT_FOUND
     }
+
+    @Unroll
+    def void "Students get by date between #from and #to, expected #count"() {
+        when:
+            def response
+            def actualErrorMessage
+            try {
+                response = restTemplate.exchange(
+                        STUDENT_URL + "/search/birthdays?from=" + from + "&to=" + to
+                        , HttpMethod.GET
+                        , new HttpEntity<>(headers)
+                        , List<Student>)
+            } catch (HttpClientErrorException e) {
+                response = e.getResponse()
+                actualErrorMessage = e.getMessage()
+            }
+        then:
+            if (response != null) {
+                List<Student> actualStudents = response.getBody()
+                assert actualStudents.size() == count
+                assert response.getStatusCode() == status
+            }
+
+        where:
+            from         | to           | count || status
+            '1997-03-17' | '1997-12-31' | 2     || HttpStatus.OK
+            '1955-12-31' | '1997-12-31' | 6     || HttpStatus.OK
+            '1993-06-03' | '1993-06-03' | 1     || HttpStatus.OK
+            '2000-06-03' | '2000-12-03' | 0     || HttpStatus.OK
+            //""           | ""           | null  || HttpStatus.BAD_REQUEST
+    }
 }

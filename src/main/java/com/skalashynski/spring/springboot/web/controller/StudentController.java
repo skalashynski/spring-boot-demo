@@ -5,6 +5,8 @@ import com.skalashynski.spring.springboot.exception.ApiException;
 import com.skalashynski.spring.springboot.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +35,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("student")
 @Slf4j
 public class StudentController {
+
+    private static final String DATE_NOT_MATCH_PATTERN = "Dates for search students equals null";
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
     private StudentService studentService;
@@ -72,5 +80,21 @@ public class StudentController {
     @GetMapping("/search")
     public List<Student> getByName(@RequestParam Map<String, String> allParams) {
         return studentService.findByFirstName(allParams.get("name"));
+    }
+
+    @GetMapping("/search/birthdays")
+    public ResponseEntity<?> getByBirthdaysDates(
+        @RequestParam(name = "from") String from,
+        @RequestParam(name = "to") String to
+    ) {
+        try {
+            DATE_FORMAT.parse(from);
+            DATE_FORMAT.parse(to);
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, DATE_NOT_MATCH_PATTERN, e);
+        }
+        java.sql.Date dateFrom = java.sql.Date.valueOf(from);
+        java.sql.Date dateTo = java.sql.Date.valueOf(to);
+        return new ResponseEntity<>(studentService.findBetweenBirthdays(dateFrom, dateTo), HttpStatus.OK);
     }
 }
