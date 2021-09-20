@@ -40,8 +40,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void delete(long id) {
-        studentRepository.deleteById(id);
+    public boolean delete(long id) {
+        if (studentRepository.existsById(id)) {
+            studentRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
