@@ -41,12 +41,14 @@ jobs:
         with:
           files: build/test-results/**/*.xml
       - name: "Upload Artifacts"
+        if: success()
         uses: actions/upload-artifact@v2
         with:
-          name: artifact-spring-boot-demo
-          path: lib
+          name: spring-boot-demo-artifact
+          path: build
   release:
     needs: build
+    if: success() && github.event_name == 'push'
     name: Creating docker image
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +57,8 @@ jobs:
       - name: "Download Artifacts"
         uses: actions/download-artifact@v2
         with:
-          name: artifact-spring-boot-demo
+          name: spring-boot-demo-artifact
+          path: build/
       - name: Build and Push Docker Image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
