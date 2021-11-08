@@ -47,7 +47,7 @@ public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                     .antMatchers(POST,"/registration").permitAll()
-                    .antMatchers(GET,"/registration/confirm").permitAll()
+                    .antMatchers(GET,"/registration/confirm", "/customers/**").permitAll()
                     .antMatchers("/**").hasAnyRole(STUDENT.name(), ADMIN.name())
 
                     //security for StudentManagementController
