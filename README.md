@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/skalashynski/spring-boot-demo/branch/dev/graph/badge.svg?token=KK8YJOER9D)](https://codecov.io/gh/skalashynski/spring-boot-demo)
 <h3>This project uses:</h3>
 <h5>Spring MVC</h5>
 <h5>Spring JPA</h5>
