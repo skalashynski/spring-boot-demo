@@ -40,6 +40,14 @@ jobs:
         if: success() || failure()
         with:
           files: build/test-results/**/*.xml
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          files: ./coverage1.xml,./coverage2.xml # optional
+          flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
       - name: "Upload Artifacts"
         if: success()
         uses: actions/upload-artifact@v2
