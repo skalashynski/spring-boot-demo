@@ -38,7 +38,7 @@ services:
     environment:
       spring.datasource.url: "jdbc:postgresql://postgresql-service:5432/spring_boot"
       spring.mail.host: "mail-dev-service"
-      spring.mail.posr: "25"
+      spring.mail.port: "25"
     networks:
       - backend
     ports:
