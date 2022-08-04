@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS APP_USERS
 CREATE TABLE IF NOT EXISTS TOKENS_CONFIRMATION
 (
     id           SERIAL PRIMARY KEY,
-    token        VARCHAR(250) NOT NULL,
+    token        VARCHAR(400) NOT NULL,
     created_at   TIMESTAMP    NOT NULL,
     expires_at   TIMESTAMP    NOT NULL,
     confirmed_at TIMESTAMP NULL,
