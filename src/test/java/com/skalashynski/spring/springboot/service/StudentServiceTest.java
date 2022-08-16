@@ -4,83 +4,129 @@ import com.skalashynski.spring.springboot.entity.Student;
 import com.skalashynski.spring.springboot.exception.ApiException;
 import com.skalashynski.spring.springboot.repository.StudentRepository;
 import com.skalashynski.spring.springboot.service.impl.StudentServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
-    private StudentService studentService;
+
     @Mock
     private StudentRepository studentRepository;
 
-    private Student student;
+    @InjectMocks
+    private StudentServiceImpl studentService;
 
-    @BeforeEach
-    void init() {
-        studentService = new StudentServiceImpl(studentRepository);
-        student = new Student(1L, "firstName", "lastName",
-                LocalDate.of(2000, 1, 1), LocalDateTime.now());
+    private static Stream<Student> provideStudents() {
+        return Stream.of(
+            new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), LocalDateTime.now()),
+            new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), LocalDateTime.now()),
+            new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), LocalDateTime.now()),
+            new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), LocalDateTime.now())
+        );
     }
 
-    @Test
-    void saveTest_whenMethodInvokes_thenStudentEntitySavesIntoRepAndReturns() {
-        Student expected = student;
-        given(studentRepository.save(ArgumentMatchers.any(Student.class)))
-                .willReturn(student);
-
-        Student actual = studentService.save(student);
-
-        then(studentRepository)
-                .should()
-                .save(student);
-        assertEquals(expected, actual);
+    private static Stream<Arguments> provideArgsForUpdateTest() {
+        return Stream.of(
+                arguments(1L, new Student(20L, "Ivan", null,
+                        LocalDate.of(2000, 1, 1), LocalDateTime.now())),
+                arguments(Long.MIN_VALUE, new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), LocalDateTime.now()))
+        );
     }
 
-    @Test
-    void getByIdTest_whenMethodInvokes_thenOptionalOfStudentReturns() {
-        Optional<Student> expected = Optional.of(student);
-        given(studentRepository.findById(student.getId()))
-                .willReturn(Optional.of(student));
-
-        Optional<Student> actual = studentService.getById(student.getId());
-
-        then(studentRepository)
-                .should()
-                .findById(student.getId());
-        assertEquals(expected, actual);
+    private static Stream<Arguments> provideArgsForUpdateFailTest() {
+        return Stream.of(
+                arguments(111L, new Student(20L, "Ivan", null,
+                        LocalDate.of(2000, 1, 1), LocalDateTime.now())),
+                arguments(3L, new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), LocalDateTime.now()))
+        );
     }
 
-    @Test
-    void findByFirstNameTest_whenMethodInvokes_thenListOfStudentsReturns() {
-        List<Student> expected = new ArrayList<>();
-        expected.add(student);
-        given(studentRepository.findByFirstName(student.getFirstName()))
+    private static Stream<Arguments> provideArgsForFindBetweenBirthdaysTest() {
+        return Stream.of(
+                // from 01.01.1985 to 10.08.2005
+                arguments(new Date(473385600000L), new Date(1123632000000L)),
+                // from 01.12.2000 to 01.01.2006
+                arguments(new Date(975628800000L), new Date(1136073600000L))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideStudents")
+    @DisplayName("Should save entity and return it")
+    void saveTest(Student expected) {
+        given(studentRepository.save(expected))
                 .willReturn(expected);
 
-        List<Student> actual = studentService.findByFirstName(student.getFirstName());
+        Student actual = studentService.save(expected);
 
         then(studentRepository)
                 .should()
-                .findByFirstName(student.getFirstName());
+                .save(expected);
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {Long.MIN_VALUE, Long.MAX_VALUE, 20L, 1234L})
+    @DisplayName("Should return an optional entity by id")
+    void getByIdTest(long id) {
+        List<Student> students = provideStudents().toList();
+        Optional<Student> expected = students.stream().filter(s -> s.getId() == id).findFirst();
+        given(studentRepository.findById(id))
+                .willReturn(expected);
+
+        Optional<Student> actual = studentService.getById(id);
+
+        then(studentRepository)
+                .should()
+                .findById(id);
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"someName", "", "Ivan"})
+    @DisplayName("Should return a list of entities by firstname")
+    void findByFirstNameTest(String name) {
+        List<Student> expected = provideStudents().filter(s -> s.getFirstName().equals(name)).toList();
+        given(studentRepository.findByFirstName(name))
+                .willReturn(expected);
+
+        List<Student> actual = studentService.findByFirstName(name);
+
+        then(studentRepository)
+                .should()
+                .findByFirstName(name);
         assertEquals(expected, actual);
     }
 
     @Test
-    void getAllTest_whenMethodInvokes_thenListOfStudentsReturns() {
-        List<Student> expected = new ArrayList<>();
-        expected.add(student);
+    @DisplayName("Should return a list of all entities")
+    void getAllTest() {
+        List<Student> expected = provideStudents().toList();
         given(studentRepository.findAll()).willReturn(expected);
 
         List<Student> actual = studentService.getAll();
@@ -91,49 +137,58 @@ class StudentServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void deleteTest_whenEntityExists_thenEntityDeletesFromRepAndReturnsTrue() {
-        given(studentRepository.existsById(student.getId()))
-                .willReturn(true);
+    @ParameterizedTest
+    @ValueSource(longs = {Long.MIN_VALUE, Long.MAX_VALUE, 20L})
+    @DisplayName("Should delete an entity by id and return true if exists")
+    void deleteTest_ok(long id) {
+        boolean expected = provideStudents()
+                .anyMatch(s -> s.getId() == id);
+        given(studentRepository.existsById(id))
+                .willReturn(expected);
 
-        boolean actual = studentService.delete(student.getId());
+        boolean actual = studentService.delete(id);
 
         then(studentRepository)
                 .should()
-                .deleteById(student.getId());
+                .deleteById(id);
+        assertTrue(expected);
         assertTrue(actual);
     }
 
-    @Test
-    void deleteTest_whenEntityDoesNotExist_thenEntityReturnsFalse() {
-        given(studentRepository.existsById(student.getId()))
-                .willReturn(false);
+    @ParameterizedTest
+    @ValueSource(longs = {1234L, 5L, 100L})
+    @DisplayName("Shouldn't delete any entity and return false if doesn't exist")
+    void deleteTest_fail(long id) {
+        boolean expected = provideStudents()
+                .anyMatch(s -> s.getId() == id);
+        given(studentRepository.existsById(id))
+                .willReturn(expected);
 
-        boolean actual = studentService.delete(student.getId());
+        boolean actual = studentService.delete(id);
 
         then(studentRepository)
                 .should(never())
-                .deleteById(student.getId());
+                .deleteById(id);
+        assertFalse(expected);
         assertFalse(actual);
     }
 
-    @Test
-    void updateTest_whenEntityExists_thenEntitySavesIntoRepAndReturns() {
-        String newFirstName = "firstName2";
-        String newLastName = "lastName2";
-        LocalDate newBirthday = LocalDate.of(2001, 1, 1);
+    @ParameterizedTest
+    @MethodSource("provideArgsForUpdateTest")
+    @DisplayName("Should update an entity by id and return it if exists")
+    void updateTest_ok(long id, Student student) {
+        Optional<Student> foundById = provideStudents()
+                .filter(s -> s.getId() == id)
+                .findFirst();
+        given(studentRepository.findById(id))
+                .willReturn(foundById);
 
-        Student expected = new Student(student.getId(), newFirstName, newLastName, newBirthday,
-                student.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-
-        Student forUpdate = new Student(2L, newFirstName, newLastName, newBirthday, LocalDateTime.now());
-
-        given(studentRepository.findById(student.getId()))
-                .willReturn(Optional.of(student));
+        Student expected = new Student(id, student.getFirstName(), student.getLastName(),
+                student.getBirthday(), foundById.orElseThrow().getCreatedAt());
         given(studentRepository.save(expected))
                 .willReturn(expected);
 
-        Student actual = studentService.update(student.getId(), forUpdate);
+        Student actual = studentService.update(id, student);
 
         then(studentRepository)
                 .should()
@@ -141,29 +196,28 @@ class StudentServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void updateTest_whenEntityDoesNotExist_thenApiExceptionThrows() {
-        String newFirstName = "firstName2";
-        String newLastName = "lastName2";
-        LocalDate newBirthday = LocalDate.of(2001, 1, 1);
-
-        Student forUpdate = new Student(2L, newFirstName, newLastName, newBirthday, LocalDateTime.now());
-
-        given(studentRepository.findById(student.getId()))
-                .willReturn(Optional.empty());
+    @ParameterizedTest
+    @MethodSource("provideArgsForUpdateFailTest")
+    @DisplayName("Should throw the ApiException if entity doesn't exist with given id")
+    void updateTest_fail(long id, Student student) {
+        Optional<Student> foundById = provideStudents()
+                .filter(s -> s.getId() == id)
+                .findFirst();
+        given(studentRepository.findById(id))
+                .willReturn(foundById);
 
         assertThrows(ApiException.class,
-                () -> studentService.update(student.getId(), forUpdate),
-                "Can't find student with id: " + student.getId());
+                () -> studentService.update(id, student),
+                "Can't find student with id: " + id);
     }
 
-    @Test
-    void findBetweenBirthdaysTest_whenMethodInvokes_thenListOfStudentsReturns() {
-        Date from = new Date(1999, Calendar.FEBRUARY, 1);
-        Date to = new Date(2001, Calendar.FEBRUARY, 1);
-
-        List<Student> expected = new ArrayList<>();
-        expected.add(student);
+    @ParameterizedTest
+    @MethodSource("provideArgsForFindBetweenBirthdaysTest")
+    @DisplayName("Should return a list of entities by period of birthday")
+    void findBetweenBirthdaysTest(Date from, Date to) {
+        List<Student> expected = provideStudents()
+                .filter(s -> s.getBirthday().getTime() >= from.getTime() && s.getBirthday().getTime() <= to.getTime())
+                .toList();
 
         given(studentRepository.findBetweenBirthdays(from, to)).willReturn(expected);
 
