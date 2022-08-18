@@ -12,16 +12,18 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class StudentServiceTestArgsProvider {
 
+    private static final LocalDateTime CREATED_AT = LocalDateTime.now();
+
     public static Stream<Student> provideStudents() {
         return Stream.of(
                 new Student(Long.MIN_VALUE, "firstName", "lastName",
-                        LocalDate.of(1993, 1, 17), LocalDateTime.now()),
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
                 new Student(Long.MAX_VALUE, "someName", "lastName",
-                        LocalDate.of(2000, 12, 1), LocalDateTime.now()),
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
                 new Student(1L, "", "",
-                        LocalDate.of(1980, 5, 28), LocalDateTime.now()),
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
                 new Student(20L, "Ivan", null,
-                        LocalDate.of(2005, 8, 10), LocalDateTime.now())
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
         );
     }
 
@@ -61,18 +63,18 @@ public class StudentServiceTestArgsProvider {
     private static Stream<Arguments> provideArgsForUpdateTest() {
         return Stream.of(
                 arguments(1L, new Student(20L, "Ivan", null,
-                        LocalDate.of(2000, 1, 1), LocalDateTime.now())),
+                        LocalDate.of(2000, 1, 1), CREATED_AT)),
                 arguments(Long.MIN_VALUE, new Student(Long.MAX_VALUE, "someName", "lastName",
-                        LocalDate.of(2000, 12, 1), LocalDateTime.now()))
+                        LocalDate.of(2000, 12, 1), CREATED_AT))
         );
     }
 
     private static Stream<Arguments> provideArgsForUpdateFailTest() {
         return Stream.of(
                 arguments(111L, new Student(20L, "Ivan", null,
-                        LocalDate.of(2000, 1, 1), LocalDateTime.now())),
+                        LocalDate.of(2000, 1, 1), CREATED_AT)),
                 arguments(3L, new Student(Long.MAX_VALUE, "someName", "lastName",
-                        LocalDate.of(2000, 12, 1), LocalDateTime.now()))
+                        LocalDate.of(2000, 12, 1), CREATED_AT))
         );
     }
 
