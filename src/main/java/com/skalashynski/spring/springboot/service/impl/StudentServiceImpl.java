@@ -2,6 +2,7 @@ package com.skalashynski.spring.springboot.service.impl;
 
 import com.skalashynski.spring.springboot.entity.Student;
 import com.skalashynski.spring.springboot.exception.ApiException;
+import com.skalashynski.spring.springboot.exception.message.ApiExceptionMessage;
 import com.skalashynski.spring.springboot.repository.StudentRepository;
 import com.skalashynski.spring.springboot.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
     public Student update(long id, Student student) {
         Optional<Student> studentDao = studentRepository.findById(id);
         if (studentDao.isEmpty()) {
-            throw new ApiException("Can't find student with id: " + id);
+            throw new ApiException(ApiExceptionMessage.CAN_NOT_FIND.getMessage() + id);
         }
         Student s = studentDao.get();
         s.setBirthday(student.getBirthday());

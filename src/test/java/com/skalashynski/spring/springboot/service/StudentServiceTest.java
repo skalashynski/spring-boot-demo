@@ -2,6 +2,7 @@ package com.skalashynski.spring.springboot.service;
 
 import com.skalashynski.spring.springboot.entity.Student;
 import com.skalashynski.spring.springboot.exception.ApiException;
+import com.skalashynski.spring.springboot.exception.message.ApiExceptionMessage;
 import com.skalashynski.spring.springboot.repository.StudentRepository;
 import com.skalashynski.spring.springboot.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -208,7 +209,7 @@ class StudentServiceTest {
 
         assertThrows(ApiException.class,
                 () -> studentService.update(id, student),
-                "Can't find student with id: " + id);
+                ApiExceptionMessage.CAN_NOT_FIND.getMessage() + id);
     }
 
     @ParameterizedTest
