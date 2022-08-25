@@ -17,19 +17,6 @@ class StudentServiceSpockTest extends Specification {
     private StudentRepository studentRepository = Mock()
     private StudentService studentService = new StudentServiceImpl(studentRepository)
 
-    private static Stream<Student> provideStudents() {
-        return Stream.of(
-                new Student(Long.MIN_VALUE, "firstName", "lastName",
-                        LocalDate.of(1993, 1, 17), CREATED_AT),
-                new Student(Long.MAX_VALUE, "someName", "lastName",
-                        LocalDate.of(2000, 12, 1), CREATED_AT),
-                new Student(1L, "", "",
-                        LocalDate.of(1980, 5, 28), CREATED_AT),
-                new Student(20L, "Ivan", null,
-                        LocalDate.of(2005, 8, 10), CREATED_AT)
-        )
-    }
-
     def "Should save entity #expected and return it"(Student expected) {
         when:
         Student actual = studentService.save(expected)
@@ -48,7 +35,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Should return an optional entity by id #id"(long id) {
         given:
-        Optional<Student> expected = provideStudents()
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        Optional<Student> expected = studentStream
                 .filter(s -> s.getId() == id)
                 .findFirst()
 
@@ -69,7 +67,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Should return a list of entities by firstname '#firstname'"(String firstname) {
         given:
-        List<Student> expected = provideStudents()
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        List<Student> expected = studentStream
                 .filter(s -> s.getFirstName() == firstname)
                 .toList()
 
@@ -89,7 +98,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Should return a list of all entities"() {
         given:
-        List<Student> expected = provideStudents().toList()
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        List<Student> expected = studentStream.toList()
 
         when:
         List<Student> actual = studentService.getAll()
@@ -101,8 +121,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Should delete an entity by id #id and return true if exists"(long id) {
         given:
-        boolean expected = provideStudents()
-                .anyMatch(s -> s.getId() == id)
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        boolean expected = studentStream.anyMatch(s -> s.getId() == id)
         studentRepository.existsById(id) >> expected
 
         when:
@@ -121,8 +151,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Shouldn't delete any entity and return false if doesn't exist"(long id) {
         given:
-        boolean expected = provideStudents()
-                .anyMatch(s -> s.getId() == id)
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        boolean expected = studentStream.anyMatch(s -> s.getId() == id)
         studentRepository.existsById(id) >> expected
 
         when:
@@ -141,7 +181,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Should update a found entity by id #id and return it if exists"(long id, Student student) {
         given:
-        Optional<Student> foundById = provideStudents()
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        Optional<Student> foundById = studentStream
                 .filter(s -> s.getId() == id)
                 .findFirst()
         studentRepository.findById(id) >> foundById
@@ -165,7 +216,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Should throw the ApiException if entity doesn't exist with given id #id"(long id, Student student) {
         given:
-        Optional<Student> foundById = provideStudents()
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        Optional<Student> foundById = studentStream
                 .filter(s -> s.getId() == id)
                 .findFirst()
         studentRepository.findById(id) >> foundById
@@ -186,7 +248,18 @@ class StudentServiceSpockTest extends Specification {
 
     def "Should return a list of entities by period of birthday from #from to #to"(Date from, Date to) {
         given:
-        List<Student> expected = provideStudents()
+        Stream<Student> studentStream = Stream.of(
+                new Student(Long.MIN_VALUE, "firstName", "lastName",
+                        LocalDate.of(1993, 1, 17), CREATED_AT),
+                new Student(Long.MAX_VALUE, "someName", "lastName",
+                        LocalDate.of(2000, 12, 1), CREATED_AT),
+                new Student(1L, "", "",
+                        LocalDate.of(1980, 5, 28), CREATED_AT),
+                new Student(20L, "Ivan", null,
+                        LocalDate.of(2005, 8, 10), CREATED_AT)
+        )
+
+        List<Student> expected = studentStream
                 .filter(s -> s.getBirthday().getTime() >= from.getTime()
                         && s.getBirthday().getTime() <= to.getTime())
                 .toList()
