@@ -45,21 +45,13 @@ public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, jwtService))
                 .addFilterAfter(new JwtTokenVerifierFilter(jwtConfig, jwtService), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                    .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
-                    .antMatchers(POST,"/registration").permitAll()
-                    .antMatchers(GET,"/registration/confirm").permitAll()
-                    .antMatchers("/**").hasAnyRole(STUDENT.name(), ADMIN.name())
-
-                    //security for StudentManagementController
-                    //there are tow way to implement permission based auth
-                    //out users are role aware. They don't know about permissions or authorities
-                    //actual order of defined antMatchers does really matter, and we have to be very careful
-                    .antMatchers(DELETE, "/management**").hasAuthority(COURSE_WRITE.getPermission())
-                    .antMatchers(POST, "/management**").hasAuthority(COURSE_WRITE.getPermission())
-                    .antMatchers(PUT, "/management**").hasAuthority(COURSE_WRITE.getPermission())
-                    .antMatchers(GET, "/management**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
-
-                    .anyRequest().authenticated();
+                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources",
+                        "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
+                .antMatchers(POST,"/registration").permitAll()
+                .antMatchers(GET,"/registration/confirm").permitAll()
+                .antMatchers("/**").hasAnyRole(STUDENT.name(), ADMIN.name())
+                .anyRequest().authenticated();
     }
 
     @Override

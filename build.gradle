@@ -58,6 +58,8 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-mail',
             'org.springframework.boot:spring-boot-starter-data-jpa',
             'org.springframework.boot:spring-boot-starter-security',
+            'io.springfox:springfox-swagger2:2.9.2',
+            'io.springfox:springfox-swagger-ui:2.9.2',
             'io.jsonwebtoken:jjwt-impl:0.11.2',
             'org.codehaus.groovy:groovy-all:3.0.5',
             'org.flywaydb:flyway-core'
