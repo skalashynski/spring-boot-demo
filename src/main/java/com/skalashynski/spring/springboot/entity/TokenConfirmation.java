@@ -23,12 +23,10 @@ import java.time.LocalDateTime;
 public class TokenConfirmation {
 
     @Id
-    @SequenceGenerator(
-        name = "confirmation_token_sequence",
-        sequenceName = "confirmation_token_sequence",
-        allocationSize = 1
-    )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "confirmation_token_sequence")
+    @SequenceGenerator(
+            name = "confirmation_token_sequence", sequenceName = "tokens_confirmation_id_seq", allocationSize = 1
+    )
     private Long id;
     @Column(nullable = false, length = 400)
     private String token;
