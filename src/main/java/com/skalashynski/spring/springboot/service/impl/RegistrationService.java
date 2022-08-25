@@ -21,7 +21,7 @@ public class RegistrationService {
 
     private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
-    private final EmailService emailSender;
+    private final EmailService emailService;
 
     /**
      * Send email and returns token
@@ -37,7 +37,7 @@ public class RegistrationService {
             request.getPassword(),
             AppUserRole.STUDENT));
 
-        emailSender.send(request.getEmail(), request.getFirstName(), LINK + token);
+        emailService.send(request.getEmail(), request.getFirstName(), LINK + token);
         return token;
     }
 

@@ -1,19 +1,20 @@
 package com.skalashynski.spring.springboot.model;
 
-
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class RegistrationRequest {
-    private final String firstName;
-    private final String lastName;
-    private final String email;
-    private final String username;
-    private final String password;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String username;
+    private String password;
 }

@@ -35,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(to);
             helper.setSubject("Spring Boot. Confirm you email.");
             helper.setText(text(firstName, link), true);
-            mailSender.send(mimeMessage);
+            //mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             LOGGER.warn("Failed to send logging");
             throw new IllegalStateException("failed tto send email", e);
