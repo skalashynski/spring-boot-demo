@@ -3,6 +3,7 @@ package com.skalashynski.spring.springboot.web.controller
 import com.skalashynski.spring.springboot.Application
 import com.skalashynski.spring.springboot.DatabaseSpecification
 import com.skalashynski.spring.springboot.entity.Student
+import com.skalashynski.spring.springboot.util.ResourceUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -31,13 +32,21 @@ class StudentControllerTest extends DatabaseSpecification {
     @Value('${test.token}')
     private String TOKEN_1_YEAR_DURATION;
 
+    static String cleanupContent
+    static String setupContent
+
+    def setupSpec() {
+        cleanupContent = ResourceUtils.getResourceContents('cleanup.sql')
+        setupContent = ResourceUtils.getResourceContents('data.sql')
+    }
+
     def setup() {
         headers.add("Authorization", TOKEN_1_YEAR_DURATION)
-        sql.execute(new File('src/test/resources/data.sql').text)
+        sql.execute(setupContent)
     }
 
     def cleanup() {
-        sql.execute(new File('src/test/resources/cleanup.sql').text)
+        sql.execute(cleanupContent)
     }
 
     def "Student get by #id, expected #expectedHttpCode"(Long id) {
