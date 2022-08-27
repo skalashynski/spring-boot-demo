@@ -6,13 +6,9 @@ import com.skalashynski.spring.springboot.repository.StudentRepository;
 import com.skalashynski.spring.springboot.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +16,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
-    private static final String DATE_NOT_MATCH_PATTERN = "Dates for search students equals null";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final StudentRepository studentRepository;
 
@@ -74,15 +68,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findBetweenBirthdays(String from, String to) {
-        LocalDate dateFrom;
-        LocalDate dateTo;
-        try {
-            dateFrom = LocalDate.parse(from, DATE_FORMATTER);
-            dateTo = LocalDate.parse(to, DATE_FORMATTER);
-        } catch (DateTimeParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, DATE_NOT_MATCH_PATTERN, e);
-        }
-        return studentRepository.findBetweenBirthdays(dateFrom, dateTo);
+    public List<Student> findBetweenBirthdays(LocalDate from, LocalDate to) {
+        return studentRepository.findBetweenBirthdays(from, to);
     }
 }

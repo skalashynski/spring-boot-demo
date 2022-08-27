@@ -2,6 +2,7 @@ package com.skalashynski.spring.springboot.service;
 
 import com.skalashynski.spring.springboot.entity.Student;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,5 +22,5 @@ public interface StudentService {
 
     Student update(long id, Student student);
 
-    List<Student> findBetweenBirthdays(String from, String to);
+    List<Student> findBetweenBirthdays(LocalDate from, LocalDate to);
 }

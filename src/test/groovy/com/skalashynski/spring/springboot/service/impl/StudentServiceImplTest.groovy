@@ -111,15 +111,15 @@ class StudentServiceImplTest extends DatabaseSpecification {
             6  | new Student("Michael", "Scofield", LocalDate.of(1992, 3, 4), null) || new Student(6, "Michael", "Scofield", LocalDate.of(1992, 3, 4), LocalDateTime.of(2021, 12, 12, 1, 2, 3))
     }
 
-    def "find students between '#from' and '#to'"(String from, String to) {
+    def "find students between '#from' and '#to'"(LocalDate from, LocalDate to) {
         when:
             def list = studentService.findBetweenBirthdays(from, to)
         then:
             list.size() == result
         where:
-            from         | to           || result
-            '1954-12-31' | '2000-12-31' || 6
-            '1983-01-24' | '1997-12-30' || 4
-            '2000-12-31' | '2022-12-31' || 0
+            from                       | to                         || result
+            LocalDate.of(1954, 12, 31) | LocalDate.of(2000, 12, 31) || 6
+            LocalDate.of(1983, 01, 24) | LocalDate.of(1997, 12, 30) || 4
+            LocalDate.of(2000, 12, 31) | LocalDate.of(2022, 12, 31) || 0
     }
 }

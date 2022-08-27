@@ -3,8 +3,9 @@ package com.skalashynski.spring.springboot.web.controller;
 import com.skalashynski.spring.springboot.entity.Student;
 import com.skalashynski.spring.springboot.exception.ApiException;
 import com.skalashynski.spring.springboot.service.StudentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,19 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("student")
+@RequiredArgsConstructor
 @Slf4j
 public class StudentController {
     private final StudentService studentService;
-
-    @Autowired
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
 
     @PostMapping
     public Student save(@RequestBody Student student) {
@@ -77,8 +75,8 @@ public class StudentController {
 
     @GetMapping("/search/birthdays")
     public ResponseEntity<?> getByBirthdaysDates(
-            @RequestParam(name = "from") String from,
-            @RequestParam(name = "to") String to
+            @RequestParam(name = "from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+            @RequestParam(name = "to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to
     ) {
         return new ResponseEntity<>(studentService.findBetweenBirthdays(from, to), HttpStatus.OK);
     }
