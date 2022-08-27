@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class AppUserRepositoryTest extends DatabaseSpecification {
+
     @Autowired
     private AppUserRepository appUserRepository;
 
@@ -20,23 +21,23 @@ class AppUserRepositoryTest extends DatabaseSpecification {
 
     def "find by email '#email'"(String email) {
         when:
-        Optional<AppUser> appUser = appUserRepository.findByEmail(email);
+            Optional<AppUser> appUser = appUserRepository.findByEmail(email);
         then:
-        appUser.isPresent()
+            appUser.isPresent()
         where:
-        email               | _
-        'dangote@gmail.com' | _
-        'monster@gmail.com' | _
+            email               | _
+            'dangote@gmail.com' | _
+            'monster@gmail.com' | _
     }
 
-    def "find by username '#username" (String username){
+    def "find by username '#username"(String username) {
         when:
-        def appUser = appUserRepository.findByUsername(username);
+            def appUser = appUserRepository.findByUsername(username);
         then:
-        appUser.isPresent();
+            appUser.isPresent();
         where:
-        username     | _
-        "gangote123" | _
-        "monster123" | _
+            username     | _
+            "gangote123" | _
+            "monster123" | _
     }
 }

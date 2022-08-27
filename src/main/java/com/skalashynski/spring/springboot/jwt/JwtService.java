@@ -39,12 +39,12 @@ public class JwtService {
         Date now = new Date(nowMillis);
 
         JwtBuilder builder = Jwts.builder()
-            .setId(id)
-            .setIssuedAt(now)
-            .claim("authorities", grantedAuthorities)
-            .setSubject(username)
-            .setIssuer(jwtConfig.getIssuer())
-            .signWith(signingKey, jwtConfig.getSignatureAlgorithm());
+                .setId(id)
+                .setIssuedAt(now)
+                .claim("authorities", grantedAuthorities)
+                .setSubject(username)
+                .setIssuer(jwtConfig.getIssuer())
+                .signWith(signingKey, jwtConfig.getSignatureAlgorithm());
 
         if (ttlSeconds != null) {
             long expMillis = nowMillis + ttlSeconds * 1000;
@@ -56,9 +56,9 @@ public class JwtService {
 
     public Claims decodeJWT(String jwt) {
         return Jwts.parserBuilder()
-            .setSigningKey(DatatypeConverter.parseBase64Binary(jwtConfig.getSecretKey()))
-            .requireIssuer(jwtConfig.getIssuer())
-            .build()
-            .parseClaimsJws(jwt).getBody();
+                .setSigningKey(DatatypeConverter.parseBase64Binary(jwtConfig.getSecretKey()))
+                .requireIssuer(jwtConfig.getIssuer())
+                .build()
+                .parseClaimsJws(jwt).getBody();
     }
 }

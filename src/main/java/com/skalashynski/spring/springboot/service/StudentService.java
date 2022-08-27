@@ -21,5 +21,5 @@ public interface StudentService {
 
     Student update(long id, Student student);
 
-    List<Student>findBetweenBirthdays(String from, String to);
+    List<Student> findBetweenBirthdays(String from, String to);
 }

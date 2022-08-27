@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class ConfirmationTokenRepositoryTest extends DatabaseSpecification {
+
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
@@ -21,11 +22,11 @@ class ConfirmationTokenRepositoryTest extends DatabaseSpecification {
 
     def "find by token '#token'"(String token) {
         when:
-        boolean present = confirmationTokenRepository.findByToken(token).isPresent();
+            boolean present = confirmationTokenRepository.findByToken(token).isPresent();
         then:
-        present
+            present
         where:
-        token                    | _
-        "AlikoDangotegangote123" | _
+            token                    | _
+            "AlikoDangotegangote123" | _
     }
 }

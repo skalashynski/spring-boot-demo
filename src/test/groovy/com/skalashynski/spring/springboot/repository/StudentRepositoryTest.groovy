@@ -9,6 +9,7 @@ import java.time.LocalDate
 
 @SpringBootTest
 class StudentRepositoryTest extends DatabaseSpecification {
+
     @Autowired
     private StudentRepository studentRepository;
 
@@ -22,36 +23,36 @@ class StudentRepositoryTest extends DatabaseSpecification {
         sql.execute(new File('src/test/resources/cleanup.sql').text)
     }
 
-    def "find by first name"(){
+    def "find by first name"() {
         when:
-        def list = studentRepository.findByFirstName(firstName)
+            def list = studentRepository.findByFirstName(firstName)
         then:
-        list.size() == amount
+            list.size() == amount
         where:
-        firstName        |  amount
-        "Aliko"     |  1
-        "Bill"      |  2
-        "Folrunsho" |  3
+            firstName   | amount
+            "Aliko"     | 1
+            "Bill"      | 2
+            "Folrunsho" | 3
     }
 
-    def "find by last name"(){
+    def "find by last name"() {
         when:
-        def list = studentRepository.findByLastName(lastName)
+            def list = studentRepository.findByLastName(lastName)
         then:
-        list.size() == amount
+            list.size() == amount
         where:
-        lastName    |  amount
-        "Gates"     |  1
-        "Brant"     |  1
-        "Ningbro"   |  1
-
+            lastName  | amount
+            "Gates"   | 1
+            "Brant"   | 1
+            "Ningbro" | 1
     }
+
     def "find between birthdays"() {
         when:
-        List<Student> list = studentRepository.findBetweenBirthdays(
-                LocalDate.of(1900,3,17),
-                LocalDate.of(2030,3,17))
+            List<Student> list = studentRepository.findBetweenBirthdays(
+                    LocalDate.of(1900, 3, 17),
+                    LocalDate.of(2030, 3, 17))
         then:
-        list.size() == 6
+            list.size() == 6
     }
 }

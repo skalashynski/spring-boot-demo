@@ -27,10 +27,10 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper()
-                .readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
+                    .readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getUsername(),
-                authenticationRequest.getPassword()
+                    authenticationRequest.getUsername(),
+                    authenticationRequest.getPassword()
             );
             Authentication authenticate = authenticationManager.authenticate(authentication);
             return authenticate;
@@ -41,10 +41,10 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     @Override
     protected void successfulAuthentication(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        FilterChain chain,
-        Authentication authResult
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain,
+            Authentication authResult
     ) {
         String jwt = jwtService.createJWT("", authResult.getName(), authResult.getAuthorities());
         response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + jwt);

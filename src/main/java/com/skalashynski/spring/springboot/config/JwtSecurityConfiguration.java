@@ -14,14 +14,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-import static com.skalashynski.spring.springboot.model.AppUserPermission.COURSE_WRITE;
 import static com.skalashynski.spring.springboot.model.AppUserRole.ADMIN;
-import static com.skalashynski.spring.springboot.model.AppUserRole.ADMIN_TRAINEE;
 import static com.skalashynski.spring.springboot.model.AppUserRole.STUDENT;
-import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity

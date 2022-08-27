@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RegistrationService {
 
-    private static final String LINK = "http://localhost:8080/api/v1/registration/confirm?token=";
+    private static final String LINK = "http://localhost:8080/demo/api/v1/registration/confirm?token=";
 
     private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
@@ -30,12 +30,12 @@ public class RegistrationService {
         //todo: email validation
 
         String token = appUserService.signUp(new AppUser(
-            request.getFirstName(),
-            request.getLastName(),
-            request.getEmail(),
-            request.getUsername(),
-            request.getPassword(),
-            AppUserRole.STUDENT));
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getUsername(),
+                request.getPassword(),
+                AppUserRole.STUDENT));
 
         emailService.send(request.getEmail(), request.getFirstName(), LINK + token);
         return token;
@@ -44,7 +44,7 @@ public class RegistrationService {
     @Transactional
     public String confirmToken(String token) {
         TokenConfirmation tokenConfirmation = confirmationTokenService.getToken(token)
-            .orElseThrow(() -> new IllegalStateException("Can't confirm illegal token"));
+                .orElseThrow(() -> new IllegalStateException("Can't confirm illegal token"));
         LocalDateTime now = LocalDateTime.now();
         if (tokenConfirmation.getConfirmedAt() != null) {
             throw new IllegalStateException("Token already confirmed");

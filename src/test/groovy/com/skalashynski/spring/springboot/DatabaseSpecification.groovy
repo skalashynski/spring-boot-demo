@@ -18,7 +18,7 @@ import javax.sql.DataSource
 @SpringBootTest
 class DatabaseSpecification extends Specification {
 
-    static def container;
+    static def container
 
     static {
         container = new PostgreSQLContainer("postgres:13.3")
@@ -36,6 +36,7 @@ class DatabaseSpecification extends Specification {
         registry.add("spring.datasource.username", container::getUsername);
         registry.add("spring.datasource.password", container::getPassword);
     }
+
     @Bean
     DataSource dataSource1() {
         HikariConfig config = new HikariConfig();

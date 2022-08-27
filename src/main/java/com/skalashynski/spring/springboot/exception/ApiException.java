@@ -1,6 +1,6 @@
 package com.skalashynski.spring.springboot.exception;
 
-public class ApiException extends RuntimeException  {
+public class ApiException extends RuntimeException {
     public ApiException() {
         super();
     }

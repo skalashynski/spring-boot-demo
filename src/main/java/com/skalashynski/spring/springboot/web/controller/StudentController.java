@@ -66,10 +66,10 @@ public class StudentController {
 
     @GetMapping("/search")
     public List<Student> getByName(@RequestParam Map<String, String> allParams) {
-        if(allParams.containsKey("first_name")) {
+        if (allParams.containsKey("first_name")) {
             return studentService.findByFirstName(allParams.get("first_name"));
         }
-        if(allParams.containsKey("last_name")){
+        if (allParams.containsKey("last_name")) {
             return studentService.findByLastName(allParams.get("last_name"));
         }
         throw new ApiException("Request parameters are not set!");
