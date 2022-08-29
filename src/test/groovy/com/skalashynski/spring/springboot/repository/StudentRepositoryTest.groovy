@@ -2,34 +2,55 @@ package com.skalashynski.spring.springboot.repository
 
 import com.skalashynski.spring.springboot.DatabaseSpecification
 import com.skalashynski.spring.springboot.entity.Student
-import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit4.SpringRunner
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration
+import java.time.LocalDate
+
 @SpringBootTest
 class StudentRepositoryTest extends DatabaseSpecification {
+
     @Autowired
     private StudentRepository studentRepository;
 
-    @SuppressWarnings("unused")
     def setup() {
         sql.execute(new File('src/test/resources/data.sql').text)
     }
 
-    @SuppressWarnings("unused")
     def cleanup() {
         sql.execute(new File('src/test/resources/cleanup.sql').text)
     }
 
+    def "find by first name"(String firstName) {
+        when:
+            def list = studentRepository.findByFirstName(firstName)
+        then:
+            list.size() == amount
+        where:
+            firstName   | amount
+            "Aliko"     | 1
+            "Bill"      | 2
+            "Folrunsho" | 3
+    }
 
-    def void "find between birthdays"() {
-        when: "Calling DB"
-            List<Student> list = studentRepository.findBetweenBirthdays(java.sql.Date.valueOf("1900-03-17"), java.sql.Date.valueOf("2030-03-17"));
-        then: ""
+    def "find by last name"(String lastName) {
+        when:
+            def list = studentRepository.findByLastName(lastName)
+        then:
+            list.size() == amount
+        where:
+            lastName  | amount
+            "Gates"   | 1
+            "Brant"   | 1
+            "Ningbro" | 1
+    }
+
+    def "find between birthdays"() {
+        when:
+            List<Student> list = studentRepository.findBetweenBirthdays(
+                    LocalDate.of(1900, 3, 17),
+                    LocalDate.of(2030, 3, 17))
+        then:
             list.size() == 6
     }
 }
