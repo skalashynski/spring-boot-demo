@@ -31,9 +31,9 @@ public class JwtTokenVerifierFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-        HttpServletRequest httpServletRequest,
-        HttpServletResponse httpServletResponse,
-        FilterChain filterChain
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
+            FilterChain filterChain
     ) throws ServletException, IOException {
         String authorizationHeader = httpServletRequest.getHeader(jwtConfig.getAuthorizationHeader());
         if (!StringUtils.hasLength(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
@@ -47,9 +47,9 @@ public class JwtTokenVerifierFilter extends OncePerRequestFilter {
             List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
             if (authorities != null) {
                 var simpleGrantedAuthorities = authorities
-                    .stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.get("authority")))
-                    .collect(Collectors.toSet());
+                        .stream()
+                        .map(authority -> new SimpleGrantedAuthority(authority.get("authority")))
+                        .collect(Collectors.toSet());
 
                 var authentication = new UsernamePasswordAuthenticationToken(username, null, simpleGrantedAuthorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

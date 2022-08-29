@@ -26,5 +26,4 @@ public class AppConfig {
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
-
 }
