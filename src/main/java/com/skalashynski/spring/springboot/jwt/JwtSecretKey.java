@@ -11,8 +11,9 @@ import javax.crypto.SecretKey;
 @AllArgsConstructor
 public class JwtSecretKey {
     private final JwtConfig jwtConfig;
+
     @Bean
-    public SecretKey getSecretKeyForSigning(){
+    public SecretKey getSecretKeyForSigning() {
         return Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes());
     }
 }

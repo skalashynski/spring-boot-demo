@@ -12,7 +12,7 @@ services:
     networks:
       - backend
     ports:
-      - ${POSTRESQL_PORT}:5432
+      - ${POSTGRESQL_PORT}:5432
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data

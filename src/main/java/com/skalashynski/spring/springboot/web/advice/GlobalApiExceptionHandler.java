@@ -12,7 +12,7 @@ public class GlobalApiExceptionHandler {
     @ResponseBody
     @ExceptionHandler(ApiException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String notFound (ApiException exception) {
+    String notFound(ApiException exception) {
         return exception.getMessage();
     }
 }

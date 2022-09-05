@@ -39,7 +39,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         appUser.setPassword(encodedPass);
         appUserRepository.save(appUser);
         TokenConfirmation tokenConfirmation = new TokenConfirmation(token, LocalDateTime.now(), LocalDateTime.now().plusSeconds(jwtService.getJwtConfig().getTokenExpirationSeconds()),
-            appUser);
+                appUser);
         confirmationTokenService.save(tokenConfirmation);
         return token;
     }
@@ -47,6 +47,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return appUserRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Can't load user with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Can't load user with username: " + username));
     }
 }
