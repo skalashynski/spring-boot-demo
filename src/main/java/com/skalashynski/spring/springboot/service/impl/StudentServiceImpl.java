@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +33,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> findByFirstName(String name) {
         return studentRepository.findByFirstName(name);
+    }
+
+    @Override
+    public List<Student> findByLastName(String name) {
+        return studentRepository.findByLastName(name);
     }
 
     @Override
@@ -64,7 +69,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findBetweenBirthdays(Date from, Date to) {
-        return studentRepository.findBetweenBirthdays(from,to);
+    public List<Student> findBetweenBirthdays(LocalDate from, LocalDate to) {
+        return studentRepository.findBetweenBirthdays(from, to);
     }
 }

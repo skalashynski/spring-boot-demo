@@ -10,13 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -26,8 +23,8 @@ import java.util.Date;
 @Entity
 public class Student {
     @Id
-    @Column(name = "id", nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "students_sequence")
+    @SequenceGenerator(name = "students_sequence", sequenceName = "students_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "first_name", nullable = false)
@@ -36,28 +33,17 @@ public class Student {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "birthday")
-    private Date birthday;
+    private LocalDate birthday;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Date createdAt;
-
-    public Student(Long id, String firstName, String lastName, LocalDate birthday, LocalDateTime createdAt) {
-        this(firstName, lastName, birthday, createdAt);
-        this.id = id;
-    }
+    private LocalDateTime createdAt;
 
     public Student(String firstName, String lastName, LocalDate birthday, LocalDateTime createdAt) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthday = java.util.Date.from(birthday.atStartOfDay()
-            .atZone(ZoneId.systemDefault())
-            .toInstant());
-        this.createdAt = java.util.Date
-            .from(createdAt.atZone(ZoneId.systemDefault())
-                .toInstant());
+        this.birthday = birthday;
+        this.createdAt = createdAt;
     }
 }
 

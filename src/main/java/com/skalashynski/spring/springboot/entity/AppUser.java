@@ -28,14 +28,14 @@ import java.util.Collection;
 @Table(name = "app_users")
 public class AppUser implements UserDetails {
     @Id
-    @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_users_sequence")
+    @SequenceGenerator(name = "app_users_sequence", sequenceName = "app_users_id_seq", allocationSize = 1)
     private Long id;
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -48,7 +48,6 @@ public class AppUser implements UserDetails {
     private Boolean isLocked = false;
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = false;
-
 
     public AppUser(String firstName, String lastName, String email, String username, String password, AppUserRole appUserRole, Boolean isLocked, Boolean enabled) {
         this.firstName = firstName;
